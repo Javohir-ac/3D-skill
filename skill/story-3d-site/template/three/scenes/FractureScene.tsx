@@ -50,7 +50,7 @@ export default function FractureScene(props: SceneProps) {
       <group ref={orbit}>
         {SHARDS.map((s, i) => (
           <group key={i} ref={(el) => { shards.current[i] = el; }} scale={s.s}>
-            <GlassShard seed={s.seed} tint="#ffd9d9" />
+            <GlassShard seed={s.seed} tint="#ffd9d9" edge="#ff9a8a" opacity={0.28} edgeOpacity={0.3} />
           </group>
         ))}
       </group>
