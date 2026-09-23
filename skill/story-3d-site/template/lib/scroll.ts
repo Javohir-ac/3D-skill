@@ -15,6 +15,12 @@ let lenis: Lenis | null = null;
 let sections: HTMLElement[] = [];
 let lines: { el: HTMLElement; chapter: number; a: number; b: number }[] = [];
 const lastP: Record<string, number> = {};
+/** Time-driven entrance for lines that start at 0 (after the intro / a gate jump). */
+const opener = { v: 1 };
+function playOpener() {
+  gsap.killTweensOf(opener);
+  gsap.fromTo(opener, { v: 0 }, { v: 1, duration: 1.4, ease: "power2.out", delay: 0.15, onUpdate: () => onScroll(lenis?.scroll ?? 0) });
+}
 
 const chapters = story.chapters;
 const top = (i: number) => sections[i]?.offsetTop ?? 0;
@@ -68,14 +74,27 @@ function update(y: number) {
   live.active = active;
   useStory.getState().setActive(active);
 
-  // scroll-scrubbed curtain across non-gated boundaries
+  // scroll-scrubbed boundary effects between non-gated chapters
   let amount = 0;
+  let burn = 0;
+  let drain = 0;
   for (let i = 0; i < chapters.length - 1; i++) {
     const kind = chapters[i].boundary ?? "black";
     // Gated boundaries are crossed by the gate cinematic, which lands exactly on
     // the boundary — a scroll curtain there would leave the screen stuck dark.
     if (kind === "cut" || chapters[i].gate) continue;
     const d = Math.abs(y - top(i + 1)) / vh;
+    if (kind === "burn") {
+      // longer run-up: the frame chars over ~0.8 screens, burns through after
+      burn = Math.max(burn, 1 - smoothstep(0, 0.8, d));
+      continue;
+    }
+    if (kind === "drain") {
+      drain = Math.max(drain, 1 - smoothstep(0, 0.9, d));
+      const a = (1 - smoothstep(0, 0.2, d)) * 0.85; // brief sepia dip at the cut
+      if (a > amount) { amount = a; live.boundary.color.set("#2a2118"); }
+      continue;
+    }
     const a = 1 - smoothstep(0, 0.45, d);
     if (a > amount) {
       amount = a;
@@ -83,6 +102,8 @@ function update(y: number) {
     }
   }
   live.boundary.amount = amount;
+  live.boundary.burn = burn;
+  live.boundary.drain = drain;
 
   // gates: stop the scroll at the gate position until the user completes it
   if (g >= 0 && !s.gate && !s.transitioning && y >= gateY(g) - 2) {
@@ -101,8 +122,9 @@ function update(y: number) {
   // copy lines: letters stagger in (CSS reads --in), whole line fades out at b
   for (const l of lines) {
     const lp = live.progress[chapters[l.chapter].id];
-    const on = l.chapter === active;
-    const enter = !on ? 0 : l.a <= 0.001 ? 1 : smoothstep(l.a, l.a + 0.12, lp);
+    // copy waits for the intro interaction (if any) so it never fights the prompt
+    const on = l.chapter === active && (!story.intro || s.introDone);
+    const enter = !on ? 0 : l.a <= 0.001 ? opener.v : smoothstep(l.a, l.a + 0.12, lp);
     const exit = !on ? 0 : 1 - smoothstep(l.b - 0.07, l.b, lp);
     const o = Math.min(enter > 0 ? 1 : 0, exit);
     l.el.style.opacity = o.toFixed(3);
@@ -154,6 +176,7 @@ export function initScroll(root: HTMLElement) {
 
 export function startScroll() {
   lenis?.start();
+  playOpener(); // first line of the chapter writes itself in (e.g. right after the intro)
 }
 
 export function scrollToChapter(i: number) {
@@ -165,6 +188,7 @@ function jumpTo(i: number) {
   if (!lenis) return;
   lenis.scrollTo(top(i) + 2, { immediate: true, force: true });
   onScroll(top(i) + 2);
+  playOpener();
 }
 
 /** Called by the gate UI when the hold completes. Plays the cinematic, then releases scroll. */

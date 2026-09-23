@@ -33,7 +33,7 @@ export interface Grade {
   grain?: number;      // film grain opacity 0..1
 }
 
-export type TransitionName = "breakToDark" | "implodeToLight" | "whiteout" | "blackout";
+export type TransitionName = "breakToDark" | "implodeToLight" | "drainCut" | "burnThrough" | "whiteout" | "blackout";
 
 export interface Gate {
   type: "hold";
@@ -109,9 +109,12 @@ export interface Chapter {
   beats?: Beat[];
   gate?: Gate;
   /** How a plain (non-gated) scroll into the NEXT chapter is hidden: a dip to
-   *  black, white, any hex colour, or a hard "cut". Default "black".
+   *  black, white, any hex colour, "burn" (the screen chars and burns through),
+   *  "drain" (colour drains to sepia + film grain, then returns) or a hard "cut".
+   *  Default "black".
    *  Prefer dark / mid-tone dips — full-white flashes are tiring on the eyes. */
-  boundary?: "black" | "white" | "cut" | `#${string}`;
+  boundary?: "black" | "white" | "cut" | "burn" | "drain" | `#${string}`;
+  backdrop?: Backdrop;
 }
 
 export interface Hotspot {
@@ -125,7 +128,30 @@ export interface Hotspot {
   cta?: { label: string; href: string };
 }
 
+/** Optional opening interaction (Zero's "draw a zero"): the story starts once solved. */
+export interface Intro {
+  type: "draw-circle";
+  prompt: string;
+  hint?: string;
+  xp?: number;
+}
+
+/** Procedural shader backdrop behind everything (per chapter, crossfaded). */
+export interface Backdrop {
+  top: string;
+  bottom: string;
+  /** Colour of the slow flowing aurora/fog layer. */
+  accent?: string;
+  /** Aurora/fog flow strength 0..1 */
+  flow?: number;
+  /** God-rays from above 0..1 */
+  rays?: number;
+  /** Star field density 0..1 */
+  stars?: number;
+}
+
 export interface StoryConfig {
+  intro?: Intro;
   brand: string;
   description: string;
   chapters: Chapter[];

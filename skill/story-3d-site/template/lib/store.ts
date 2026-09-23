@@ -13,6 +13,12 @@ interface StoryState {
   xpBurst: number; // increments to trigger the "+XP" animation
   reducedMotion: boolean;
   hotspot: string | null;
+  /** Loader finished — the intro interaction (if any) may start. */
+  ready: boolean;
+  /** Intro interaction (draw-to-begin) solved or skipped. */
+  introDone: boolean;
+  setReady: (v: boolean) => void;
+  finishIntro: (xp: number) => void;
   setLoaded: (v: boolean) => void;
   setActive: (i: number) => void;
   openGate: (id: string) => void;
@@ -32,6 +38,10 @@ export const useStory = create<StoryState>((set) => ({
   xpBurst: 0,
   reducedMotion: false,
   hotspot: null,
+  ready: false,
+  introDone: false,
+  setReady: (ready) => set({ ready }),
+  finishIntro: (xp) => set((s) => (s.introDone ? s : { introDone: true, xp: s.xp + xp, xpBurst: xp ? s.xpBurst + 1 : s.xpBurst })),
   setLoaded: (loaded) => set({ loaded }),
   setActive: (active) => set((s) => (s.active === active ? s : { active })),
   openGate: (gate) => set({ gate }),

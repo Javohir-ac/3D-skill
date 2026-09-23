@@ -1,6 +1,8 @@
 "use client";
 import dynamic from "next/dynamic";
 import Chapters from "./Chapters";
+import { Cursor } from "./ui/Cursor";
+import { DrawIntro } from "./ui/DrawIntro";
 import { HoldGate } from "./ui/HoldGate";
 import { ChapterNav, CTA, HotspotCard, MotionToggle, ProgressRuler, XP } from "./ui/Hud";
 import { Loader } from "./ui/Loader";
@@ -19,8 +21,10 @@ export default function Story() {
       <CTA />
       <MotionToggle />
       <HoldGate />
+      <DrawIntro />
       <HotspotCard />
       <Loader />
+      <Cursor />
     </>
   );
 }

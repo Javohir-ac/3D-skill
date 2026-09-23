@@ -50,6 +50,25 @@ const builders: Record<TransitionName, Builder> = {
       .to(fx, { flash: 0, duration: reduced ? 0.5 : 1.6, ease: "power2.out" });
   },
 
+  // Memory fades: colour drains to sepia with heavy grain, hard cut on the
+  // greyest frame, colour flows back into the new chapter.
+  drainCut(tl, fx, { jump, reduced }) {
+    fx.curtainColor.set("#2a2118");
+    tl.to(fx, { drain: 1, grainBoost: 1, duration: reduced ? 0.4 : 1.4, ease: "power1.in" })
+      .to(fx, { curtain: 0.85, duration: 0.25, ease: "power2.in" })
+      .call(jump)
+      .to(fx, { curtain: 0, duration: 0.3 }, "+=0.15")
+      .to(fx, { drain: 0, grainBoost: 0, duration: reduced ? 0.4 : 1.6, ease: "power2.out" });
+  },
+
+  // The whole frame chars from the edges and burns through into the next world.
+  burnThrough(tl, fx, { jump, reduced }) {
+    tl.to(fx, { burn: 1, duration: reduced ? 0.5 : 1.6, ease: "power1.in" })
+      .call(jump)
+      .to({}, { duration: 0.25 })
+      .to(fx, { burn: 0, duration: reduced ? 0.5 : 1.8, ease: "power2.out" });
+  },
+
   whiteout(tl, fx, { jump, reduced }) {
     fx.flashColor.set("#e4efea");
     tl.to(fx, { flash: 1, duration: reduced ? 0.3 : 0.8, ease: "power2.in" })

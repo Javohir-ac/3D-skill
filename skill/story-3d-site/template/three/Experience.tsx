@@ -6,9 +6,11 @@ import { ACESFilmicToneMapping, Color } from "three";
 import { live } from "@/lib/live";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
+import { Backdrop } from "./Backdrop";
 import { CameraDirector } from "./CameraDirector";
 import { CameraRig } from "./CameraRig";
 import { Hero } from "./hero/Hero";
+import { ScreenBurn } from "./fx/ScreenBurn";
 import { ScreenShatter } from "./fx/ScreenShatter";
 import { PostFX } from "./postfx/PostFX";
 import { scenes } from "./scenes";
@@ -64,6 +66,7 @@ export default function Experience() {
         eventPrefix="client"
       >
         <Background />
+        <Backdrop />
         <Environment resolution={128}>
           {/* procedural studio lighting — no HDR download needed */}
           <Lightformer intensity={2} position={[0, 4, 3]} scale={[8, 2, 1]} />
@@ -78,6 +81,7 @@ export default function Experience() {
           </Suspense>
         </CameraRig>
         <ScreenShatter />
+        <ScreenBurn />
         <PostFX />
         <AdaptiveDpr pixelated={false} />
         <LoadWatcher />

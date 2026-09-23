@@ -15,6 +15,7 @@ const fragment = /* glsl */ `
   uniform float uFlash;
   uniform vec3 uFlashColor;
   uniform float uGlitch;
+  uniform float uDrain;
   uniform float uTime;
 
   float h1(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
@@ -34,6 +35,10 @@ const fragment = /* glsl */ `
     c = mix(vec3(l), c, uSaturation);
     c = (c - 0.5) * uContrast + 0.5;
     c = mix(c, uTint * (l * 1.35 + 0.08), uTintAmount);
+
+    // drain: colour bleeds out to an old-photo sepia (memory / loss)
+    float ld = dot(c, vec3(0.2126, 0.7152, 0.0722));
+    c = mix(c, vec3(ld * 1.05, ld * 0.93, ld * 0.78), clamp(uDrain, 0.0, 1.0));
 
     if (uGlitch > 0.001) {
       // strobe between normal and crushed frames (the "middle finger" flicker)
@@ -63,6 +68,7 @@ export class ColorGradeEffect extends Effect {
         ["uFlash", new Uniform(0)],
         ["uFlashColor", new Uniform(new Color("#ffffff"))],
         ["uGlitch", new Uniform(0)],
+        ["uDrain", new Uniform(0)],
         ["uTime", new Uniform(0)],
       ]),
     });

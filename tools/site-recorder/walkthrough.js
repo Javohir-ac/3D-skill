@@ -8,6 +8,27 @@ const [url = 'http://localhost:3100', outDir = './qa', W = '1440', H = '810'] = 
 const OUT = path.resolve(outDir);
 fs.mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Solve an optional "draw a circle" intro with real mouse input.
+async function solveIntro(page, W, H, shot) {
+  if (!(await page.$('.intro'))) return false;
+  await new Promise((res) => setTimeout(res, 1200)); // let the intro mount its listeners
+  if (shot) await shot('intro');
+  const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.2;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.mouse.move(cx + r, cy);
+    await page.mouse.down();
+    for (let i = 0; i <= 60; i++) {
+      const a = (i / 60) * Math.PI * 2.05;
+      await page.mouse.move(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+      await new Promise((res) => setTimeout(res, 12));
+    }
+    await page.mouse.up();
+    const closed = await page.waitForFunction(() => !document.querySelector('.intro'), { timeout: 3000 }).then(() => true, () => false);
+    if (closed) return true;
+  }
+  throw new Error('intro circle was not recognised after 3 attempts');
+}
+
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -35,6 +56,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await page.waitForSelector('.loader.is-gone', { timeout: 60000 });
   log(`loader gone after ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   await sleep(800);
+  if (await solveIntro(page, +W, +H, shot)) log('intro solved (circle drawn)');
+  await sleep(600);
   await shot('start');
 
   const cx = +W / 2, cy = +H / 2;

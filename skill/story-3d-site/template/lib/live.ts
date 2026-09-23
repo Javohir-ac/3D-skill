@@ -14,7 +14,7 @@ export const live = {
   /** Raw pointer in CSS pixels (for the custom cursor). */
   mouse: { x: -100, y: -100 },
   /** Scroll-driven curtain between chapters (0..1) and its colour. */
-  boundary: { amount: 0, color: new Color("#000000"), burn: 0 },
+  boundary: { amount: 0, color: new Color("#000000"), burn: 0, drain: 0 },
   /** World position / scale of the hero object (camera + DOF can follow it). */
   hero: { pos: new Vector3(), scale: 1 },
   /** Values animated by gate transitions and beats (GSAP tweens these directly). */

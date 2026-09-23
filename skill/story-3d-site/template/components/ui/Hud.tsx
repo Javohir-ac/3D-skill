@@ -63,7 +63,7 @@ export function ChapterNav() {
 
 export function CTA() {
   return (
-    <a className="cta" href={story.cta.href}>
+    <a className="cta" href={story.cta.href} data-magnetic>
       <span className="cta-mark" aria-hidden="true" />
       {story.cta.label}
     </a>

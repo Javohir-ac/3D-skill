@@ -5,6 +5,27 @@
 const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Solve an optional "draw a circle" intro with real mouse input.
+async function solveIntro(page, W, H, shot) {
+  if (!(await page.$('.intro'))) return false;
+  await new Promise((res) => setTimeout(res, 1200)); // let the intro mount its listeners
+  if (shot) await shot('intro');
+  const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.2;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.mouse.move(cx + r, cy);
+    await page.mouse.down();
+    for (let i = 0; i <= 60; i++) {
+      const a = (i / 60) * Math.PI * 2.05;
+      await page.mouse.move(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+      await new Promise((res) => setTimeout(res, 12));
+    }
+    await page.mouse.up();
+    const closed = await page.waitForFunction(() => !document.querySelector('.intro'), { timeout: 3000 }).then(() => true, () => false);
+    if (closed) return true;
+  }
+  throw new Error('intro circle was not recognised after 3 attempts');
+}
+
 const OUT = process.argv[2] || './gate';
 const URL = process.argv[3] || 'http://localhost:3100';
 fs.mkdirSync(OUT, { recursive: true });
@@ -17,7 +38,9 @@ fs.mkdirSync(OUT, { recursive: true });
   page.on('console', (m) => m.type() === 'error' && errs.push(m.text()));
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.loader.is-gone', { timeout: 60000 });
-  await sleep(500);
+  await sleep(800);
+  console.log('intro solved:', await solveIntro(page, 1280, 760));
+  await sleep(900);
   const state = () => page.evaluate(() => ({ y: Math.round(scrollY), gate: !!document.querySelector('.gate-btn'), label: document.querySelector('.ruler-label')?.textContent }));
   // average brightness of the canvas area (0..255) — detects black/white stalls
   const brightness = () => page.evaluate(() => {

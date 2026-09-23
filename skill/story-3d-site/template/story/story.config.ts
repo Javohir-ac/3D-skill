@@ -14,6 +14,7 @@ const MINT_LIGHT = "#9dffd0";
 const RED = "#ff3b2f";
 
 export const story: StoryConfig = {
+  intro: { type: "draw-circle", prompt: "Draw a circle to begin", hint: "your first hour starts here", xp: 100 },
   brand: "Aurora",
   description: "Aurora — a demo storytelling site built with the story-3d-site template.",
   cta: { label: "Join the waitlist", href: "#join" },
@@ -25,8 +26,9 @@ export const story: StoryConfig = {
       length: 2.6,
       scene: "intro",
       background: "#a9c9bc",
+      backdrop: { top: "#c3dcd1", bottom: "#7fa999", accent: "#e4fff3", flow: 0.55, rays: 0.25 },
       grade: { exposure: 0.94, saturation: 1.0, contrast: 1.02, tint: "#bff5dc", tintAmount: 0.06, bloom: 0.55, vignette: 0.35, grain: 0.05 },
-      boundary: "#2c4a41",
+      boundary: "drain",
       hero: [
         { at: 0, pos: [0, 0, 0], scale: 0.55, noise: 0.35, color: MINT, accent: MINT_LIGHT, glow: 0.1, spin: 0.25 },
         { at: 0.5, pos: [0, 0.1, 0], scale: 0.9, noise: 0.28, glow: 0.2 },
@@ -55,6 +57,7 @@ export const story: StoryConfig = {
       length: 2.8,
       scene: "dream",
       background: "#8fb3c4",
+      backdrop: { top: "#a9c7d6", bottom: "#6f93a5", accent: "#ffe3ee", flow: 0.25, rays: 0.6 },
       grade: { exposure: 0.92, saturation: 0.95, contrast: 1.02, tint: "#ffe3ee", tintAmount: 0.05, bloom: 0.45, vignette: 0.35, grain: 0.05 },
       gate: { type: "hold", at: 0.9, label: "Hold", transition: "breakToDark", xp: 100 },
       hero: [
@@ -86,6 +89,7 @@ export const story: StoryConfig = {
       length: 2,
       scene: "fracture",
       background: "#1a0203",
+      backdrop: { top: "#2a0405", bottom: "#070000", accent: "#ff2a1a", flow: 0.5, rays: 0.3 },
       grade: { exposure: 1.0, saturation: 1.15, contrast: 1.12, tint: "#ff1a1a", tintAmount: 0.35, bloom: 1.2, vignette: 0.55, grain: 0.12 },
       hero: [
         { at: 0, pos: [1.25, -0.05, -0.4], scale: 0.8, noise: 0.05, crack: 1, glow: 0, glass: 0, color: "#3a0b0b", accent: RED, spin: 0.15 },
@@ -113,8 +117,9 @@ export const story: StoryConfig = {
       length: 3.4,
       scene: "evidence",
       background: "#170203",
+      backdrop: { top: "#240304", bottom: "#050000", accent: "#ff3a20", flow: 0.35, rays: 0.4 },
       grade: { exposure: 1.0, saturation: 1.1, contrast: 1.1, tint: "#ff2020", tintAmount: 0.3, bloom: 1.0, vignette: 0.55, grain: 0.12 },
-      boundary: "black",
+      boundary: "burn",
       hero: [
         { at: 0, pos: [0, 0, -2.5], scale: 0.7, crack: 1, color: "#3a0b0b", accent: RED, spin: 0.08 },
         { at: 0.6, pos: [0.4, -0.2, -5], scale: 0.5, crack: 1 },
@@ -146,6 +151,7 @@ export const story: StoryConfig = {
       length: 2,
       scene: "charge",
       background: "#030605",
+      backdrop: { top: "#06110c", bottom: "#010302", accent: "#1fbf74", flow: 0.35, stars: 1 },
       grade: { exposure: 1.0, saturation: 1.0, contrast: 1.05, tint: "#35ff9a", tintAmount: 0.12, bloom: 1.6, vignette: 0.5, grain: 0.1 },
       gate: { type: "hold", at: 0.82, label: "Hold", transition: "implodeToLight", xp: 100 },
       hero: [
@@ -173,6 +179,7 @@ export const story: StoryConfig = {
       length: 3.2,
       scene: "reveal",
       background: "#8eaebd",
+      backdrop: { top: "#a7c4d2", bottom: "#7e9fae", accent: "#eaf6ff", flow: 0.2, rays: 0.5 },
       grade: { exposure: 0.95, saturation: 1.0, contrast: 1.02, tint: "#dff2ff", tintAmount: 0.04, bloom: 0.35, vignette: 0.3, grain: 0.04 },
       boundary: "cut",
       camera: [
@@ -198,6 +205,7 @@ export const story: StoryConfig = {
       length: 1.4,
       scene: "finale",
       background: "#0d1512",
+      backdrop: { top: "#16261f", bottom: "#050907", accent: "#39ff9f", flow: 0.3, stars: 0.5 },
       grade: { exposure: 1.0, saturation: 1.05, contrast: 1.0, tint: "#9dffd0", tintAmount: 0.05, bloom: 0.9, vignette: 0.35, grain: 0.05 },
       hero: [{ at: 0, pos: [0, 0.9, 0], scale: 0.28, noise: 0.15, crack: 0, glow: 1.2, glass: 0.55, color: MINT, accent: MINT_LIGHT, spin: 0.4 }],
       camera: [

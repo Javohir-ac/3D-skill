@@ -66,6 +66,7 @@ export function HoldGate() {
       <button
         ref={btn}
         className="gate-btn"
+        data-magnetic
         aria-label={`${label} to continue. Press and hold the button, or hold Space.`}
         onPointerDown={(e) => {
           e.preventDefault();
