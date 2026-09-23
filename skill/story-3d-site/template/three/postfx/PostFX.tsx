@@ -51,7 +51,7 @@ export function PostFX() {
     (u("uFlashColor").value as Color).copy(fx.flashColor);
     u("uGlitch").value = fx.glitch;
 
-    if (bloom.current) bloom.current.intensity = c.bloom * (1 + fx.flash * 2);
+    if (bloom.current) bloom.current.intensity = c.bloom * (1 + fx.flash * 2 + fx.pulse * 1.2);
     if (noise.current) noise.current.blendMode.opacity.value = c.grain;
     if (vignette.current) vignette.current.darkness = c.vignette;
     if (chroma.current) {

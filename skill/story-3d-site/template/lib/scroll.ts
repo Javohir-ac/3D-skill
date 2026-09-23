@@ -5,7 +5,8 @@ import { story } from "@/story/story.config";
 import { buildTransition } from "@/story/transitions";
 import { live, resetFx } from "./live";
 import { useStory } from "./store";
-import { smoothstep, window01 } from "./math";
+import { fireBeat } from "./beats";
+import { smoothstep } from "./math";
 
 // Scroll engine: Lenis smooth scroll → per-chapter progress → gates.
 // Chapters are tall <section>s; the canvas and copy are position:fixed on top.
@@ -13,6 +14,7 @@ import { smoothstep, window01 } from "./math";
 let lenis: Lenis | null = null;
 let sections: HTMLElement[] = [];
 let lines: { el: HTMLElement; chapter: number; a: number; b: number }[] = [];
+const lastP: Record<string, number> = {};
 
 const chapters = story.chapters;
 const top = (i: number) => sections[i]?.offsetTop ?? 0;
@@ -89,14 +91,24 @@ function update(y: number) {
     lenis?.scrollTo(gateY(g), { immediate: true, force: true });
   }
 
-  // copy lines: fade by their [a,b] window of chapter progress
+  // beats: fire once when scrolling FORWARD past their mark
+  const ch = chapters[active];
+  const p = live.progress[ch.id];
+  const prev = lastP[ch.id] ?? p;
+  if (ch.beats && p > prev) for (const b of ch.beats) if (prev < b.at && p >= b.at) fireBeat(b, s.reducedMotion);
+  lastP[ch.id] = p;
+
+  // copy lines: letters stagger in (CSS reads --in), whole line fades out at b
   for (const l of lines) {
-    const p = live.progress[chapters[l.chapter].id];
-    // lines that start at 0 are visible immediately (no fade-in from nothing)
-    const o = l.chapter !== active ? 0 : l.a <= 0.001 ? 1 - smoothstep(l.b - 0.07, l.b, p) : window01(p, l.a, l.b, 0.07);
+    const lp = live.progress[chapters[l.chapter].id];
+    const on = l.chapter === active;
+    const enter = !on ? 0 : l.a <= 0.001 ? 1 : smoothstep(l.a, l.a + 0.12, lp);
+    const exit = !on ? 0 : 1 - smoothstep(l.b - 0.07, l.b, lp);
+    const o = Math.min(enter > 0 ? 1 : 0, exit);
     l.el.style.opacity = o.toFixed(3);
-    l.el.style.transform = `translate3d(0, ${((1 - o) * 18).toFixed(1)}px, 0)`;
-    l.el.style.filter = o < 0.99 ? `blur(${((1 - o) * 8).toFixed(1)}px)` : "none";
+    l.el.style.setProperty("--in", enter.toFixed(3));
+    l.el.style.transform = `translate3d(0, ${((1 - exit) * -14).toFixed(1)}px, 0) scale(${(1 + (1 - enter) * 0.05).toFixed(3)})`;
+    l.el.style.filter = exit < 0.99 ? `blur(${((1 - exit) * 8).toFixed(1)}px)` : "none";
   }
 }
 

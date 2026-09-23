@@ -59,6 +59,24 @@ a { color: inherit; }
 .size-sm { font-size: clamp(14px, 1.3vw, 18px); line-height: 1.35; font-weight: 400; letter-spacing: 0; max-width: 34ch; }
 .anchor-br .size-sm, .anchor-tr .size-sm { margin-left: auto; }
 
+/* letter-by-letter entrance: --in (line, 0..1) × --d (char stagger 0..1) */
+.word { display: inline-block; white-space: nowrap; }
+.ch {
+  --t: clamp(0, calc((var(--in, 1) * 1.7 - var(--d, 0) * 0.7) * 1.6), 1);
+  display: inline-block;
+  opacity: var(--t);
+  transform: translateY(calc((1 - var(--t)) * 0.42em)) rotate(calc((1 - var(--t)) * 4deg));
+}
+/* swash capitals write themselves in (left → right wipe) with a soft glow */
+.ch.swash {
+  /* em units: the swash box has line-height 0, so % insets would clip it away */
+  clip-path: inset(-0.9em calc((1 - var(--t)) * 100%) -0.9em -0.5em);
+  opacity: 1;
+  transform: none;
+  text-shadow: 0 0 calc(var(--t) * 18px) rgba(157, 255, 208, 0.35);
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
 /* the script "swash" capital, e.g. *C*ollege */
 .swash {
   font-family: var(--font-script), cursive;

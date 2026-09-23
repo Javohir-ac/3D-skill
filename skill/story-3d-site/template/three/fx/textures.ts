@@ -102,6 +102,56 @@ export function makeBeamTexture() {
   return finish(c);
 }
 
+/** A paper calendar page whose days are crossed out — "someday" never arrives. */
+export function makeCalendarTexture(opts: { title?: string; serif?: string; mono?: string } = {}) {
+  const [c, g] = canvas(768, 960);
+  const serif = opts.serif ?? "Georgia, serif";
+  const mono = opts.mono ?? "monospace";
+  // paper
+  const paper = g.createLinearGradient(0, 0, 0, 960);
+  paper.addColorStop(0, "#f3ecdd");
+  paper.addColorStop(1, "#e6dcc7");
+  g.fillStyle = paper;
+  g.fillRect(0, 0, 768, 960);
+  // binding holes
+  g.fillStyle = "#b9ab90";
+  for (let i = 0; i < 6; i++) { g.beginPath(); g.arc(114 + i * 108, 40, 10, 0, Math.PI * 2); g.fill(); }
+  // header
+  g.fillStyle = "#2b1d14";
+  g.font = `italic 96px ${serif}`;
+  g.textAlign = "center";
+  g.fillText(opts.title ?? "Someday", 384, 170);
+  g.font = `600 22px ${mono}`;
+  g.fillStyle = "#7a6650";
+  const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  days.forEach((d, i) => g.fillText(d, 84 + i * 100, 250));
+  // grid of days, most crossed out in red marker
+  g.font = `44px ${serif}`;
+  for (let r = 0; r < 5; r++)
+    for (let k = 0; k < 7; k++) {
+      const n = r * 7 + k + 1;
+      if (n > 31) continue;
+      const x = 84 + k * 100;
+      const y = 330 + r * 120;
+      g.strokeStyle = "rgba(43,29,20,0.18)";
+      g.lineWidth = 2;
+      g.strokeRect(x - 46, y - 58, 92, 110);
+      g.fillStyle = "#2b1d14";
+      g.fillText(String(n), x, y);
+      if (rand(n * 3.3) > 0.12) {
+        g.strokeStyle = "rgba(200,30,30,0.85)";
+        g.lineWidth = 6;
+        g.beginPath();
+        g.moveTo(x - 30 + rand(n) * 6, y - 38);
+        g.lineTo(x + 30, y + 30 + rand(n + 1) * 6);
+        g.moveTo(x + 28, y - 36);
+        g.lineTo(x - 28, y + 28);
+        g.stroke();
+      }
+    }
+  return finish(c);
+}
+
 /** Text on a transparent canvas, using a CSS font family (e.g. a next/font variable). */
 export function makeTextTexture(
   lines: { text: string; size: number; family: string; italic?: boolean }[],

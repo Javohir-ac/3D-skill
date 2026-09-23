@@ -70,7 +70,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       await sleep(2500);
       await shot('finale');
       const hs = await page.$('.hotspot');
-      if (hs) { await hs.click(); await sleep(700); await shot('finale-card'); }
+      // click by coordinates: ElementHandle.click() would scroll the page to 'reveal' the 3D-anchored element
+      if (hs) { const bb = await hs.boundingBox(); await page.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2); await sleep(700); await shot('finale-card'); }
       break;
     }
   }

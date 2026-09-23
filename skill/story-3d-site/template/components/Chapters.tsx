@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { initScroll } from "@/lib/scroll";
-import { renderSwash } from "@/lib/text";
+import { renderAnimated } from "@/lib/text";
 import { story } from "@/story/story.config";
 import type { StoryLine } from "@/story/types";
 
@@ -19,7 +19,7 @@ function Line({ line, chapter, first }: { line: StoryLine; chapter: number; firs
       data-b={b}
       style={{ opacity: 0 }}
     >
-      <Tag className={`copy style-${line.style ?? "serif"} size-${line.size ?? "lg"}`}>{renderSwash(line.text)}</Tag>
+      <Tag className={`copy style-${line.style ?? "serif"} size-${line.size ?? "lg"}`}>{renderAnimated(line.text)}</Tag>
       {line.source && (
         <a className="source" href={line.source.href} target="_blank" rel="noreferrer">
           Source: {line.source.label}

@@ -19,7 +19,7 @@ export default function FinaleScene(props: SceneProps) {
         <group position={[0, -1.2, 0]} rotation={[0.55, 0.3, 0]}>
           <CityGrid base="#c9d6d0" />
           <group position={[0, 0.6, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.7}>
-            <SegmentedRings color="#39ff9f" />
+            <SegmentedRings color="#39ff9f" core={false} />
           </group>
           {story.hotspots.map((h) => (
             <Html key={h.id} position={h.position} center zIndexRange={[20, 0]}>

@@ -72,15 +72,17 @@ export function CloudField({ dive, opacity, color = "#ffffff", speed = 0.9, dept
     const clouds = LAYERS.flatMap((L) =>
       Array.from({ length: L.n }, () => {
         const z = L.z + (r() - 0.5) * 2;
-        const spreadX = Math.abs(z) * 0.62;
-        const spreadY = Math.abs(z) * 0.4;
+        // wider than the frustum at that depth (camera sits ~6 units behind z=0),
+        // so the field never shows a hard left/right edge
+        const spreadX = (Math.abs(z) + 6) * 0.95;
+        const spreadY = (Math.abs(z) + 6) * 0.5;
         const sc = L.s[0] + r() * (L.s[1] - L.s[0]);
         return {
           x: (r() * 2 - 1) * spreadX, y: (r() * 2 - 1) * spreadY, z,
           sx: sc, sy: sc * 0.55, rot: (r() - 0.5) * 0.5,
           rect: atlas.rects[Math.floor(r() * atlas.rects.length)],
           phase: r() * Math.PI * 2, freq: 0.25 + r() * 0.45, amp: 0.2 + r() * 0.4,
-          wrap: Math.abs(z) * 0.62 + 6,
+          wrap: (Math.abs(z) + 6) * 0.95 + 4,
         };
       }),
     );

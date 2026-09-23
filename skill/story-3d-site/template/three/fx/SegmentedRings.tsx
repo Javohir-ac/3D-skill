@@ -23,7 +23,7 @@ const RINGS = [
   { r: 1.7, w: 0.16, seg: 7, gap: 0.45, speed: -0.12, bright: 0.6 },
 ];
 
-export function SegmentedRings({ color = "#39ff9f", visible = () => 1 }: { color?: string; visible?: () => number }) {
+export function SegmentedRings({ color = "#39ff9f", visible = () => 1, core: showCore = true }: { color?: string; visible?: () => number; core?: boolean }) {
   const group = useRef<Group>(null);
   const core = useRef<Mesh>(null);
   const rings = useMemo(
@@ -42,6 +42,7 @@ export function SegmentedRings({ color = "#39ff9f", visible = () => 1 }: { color
     [color],
   );
   const coreMat = useMemo(() => new MeshBasicMaterial({ color: new Color("#ffffff").multiplyScalar(3), toneMapped: false, transparent: true }), []);
+  const coreGeo = useMemo(() => new SphereGeometry(1, 32, 16), []);
   const refs = useRef<(Mesh | null)[]>([]);
 
   useFrame((state, dt) => {
@@ -71,7 +72,7 @@ export function SegmentedRings({ color = "#39ff9f", visible = () => 1 }: { color
       {rings.map((R, i) => (
         <mesh key={i} ref={(el) => { refs.current[i] = el; }} geometry={R.geo} material={R.mat} />
       ))}
-      <mesh ref={core} geometry={useMemo(() => new SphereGeometry(1, 32, 16), [])} material={coreMat} />
+      <mesh ref={core} geometry={coreGeo} material={coreMat} visible={showCore} />
     </group>
   );
 }

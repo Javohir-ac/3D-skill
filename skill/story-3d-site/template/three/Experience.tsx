@@ -6,7 +6,9 @@ import { ACESFilmicToneMapping, Color } from "three";
 import { live } from "@/lib/live";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
+import { CameraDirector } from "./CameraDirector";
 import { CameraRig } from "./CameraRig";
+import { Hero } from "./hero/Hero";
 import { ScreenShatter } from "./fx/ScreenShatter";
 import { PostFX } from "./postfx/PostFX";
 import { scenes } from "./scenes";
@@ -68,7 +70,9 @@ export default function Experience() {
           <Lightformer intensity={1.2} position={[-5, 0, 2]} scale={[2, 6, 1]} color="#ffe6f0" />
           <Lightformer intensity={1.2} position={[5, 0, 2]} scale={[2, 6, 1]} color="#dffaf0" />
         </Environment>
+        <CameraDirector />
         <CameraRig>
+          <Hero />
           <Suspense fallback={null}>
             <Scenes />
           </Suspense>

@@ -47,6 +47,49 @@ export interface Gate {
   xp?: number;
 }
 
+export type Vec3 = [number, number, number];
+
+/**
+ * The HERO — one recurring object that lives through the WHOLE story and changes
+ * form (Zero's hand: ice → god → middle finger → statue → dollar). Keys are
+ * sampled by chapter progress; omitted fields inherit from the previous key.
+ * Make the last key of a chapter match the first key of the next for continuity
+ * (or change it inside a gate transition, where the swap is hidden).
+ */
+export interface HeroKey {
+  at: number;
+  pos?: Vec3;
+  scale?: number;
+  /** Surface turbulence (liquid / alive). 0 = calm sphere. */
+  noise?: number;
+  /** Glowing fissures (broken). 0..1 */
+  crack?: number;
+  /** Self-illumination; > 1 blooms. */
+  glow?: number;
+  /** Glass look (transparent body, bright rim). 0..1 */
+  glass?: number;
+  color?: string;
+  /** Colour of the fissures / rim light. */
+  accent?: string;
+  /** Spin speed (rad/s). */
+  spin?: number;
+}
+
+/** Camera choreography: keyframes sampled by chapter progress (damped). */
+export interface CameraKey {
+  at: number;
+  pos: Vec3;
+  look?: Vec3;
+  fov?: number;
+}
+
+/** A one-shot event fired when scrolling forward past `at` (keeps every few seconds alive). */
+export interface Beat {
+  at: number;
+  fx: "pulse" | "shake" | "flash" | "burst";
+  strength?: number;
+}
+
 export type SceneName =
   | "intro" | "dream" | "fracture" | "evidence" | "charge" | "reveal" | "finale";
 
@@ -61,6 +104,9 @@ export interface Chapter {
   background: string;
   grade: Grade;
   lines: StoryLine[];
+  hero?: HeroKey[];
+  camera?: CameraKey[];
+  beats?: Beat[];
   gate?: Gate;
   /** How a plain (non-gated) scroll into the NEXT chapter is hidden: a dip to
    *  black, white, any hex colour, or a hard "cut". Default "black".
