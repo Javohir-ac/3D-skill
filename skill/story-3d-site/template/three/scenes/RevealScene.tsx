@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import type { Group } from "three";
 import { smoothstep } from "@/lib/math";
 import { CityGrid } from "../fx/CityGrid";
@@ -21,7 +21,9 @@ export default function RevealScene(props: SceneProps) {
       <hemisphereLight args={["#ffffff", "#b7c9c1", 1.4]} />
       <directionalLight position={[5, 10, 4]} intensity={2.4} />
       <group ref={world}>
-        <CityGrid />
+        <Suspense fallback={null}>
+          <CityGrid base="#93a8a1" />
+        </Suspense>
       </group>
       <CloudField dive={() => p()} opacity={() => 1 - smoothstep(0.75, 1, p())} speed={0.8} depth={34} seed={4} color="#e6ecef" />
     </group>
