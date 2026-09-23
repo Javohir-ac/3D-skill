@@ -14,6 +14,8 @@ export default function Story() {
   return (
     <>
       <Experience />
+      {/* fixed, accessible layer for 3D-anchored HTML (hotspots) — the canvas itself is aria-hidden */}
+      <div id="hotspot-layer" className="hotspot-layer" />
       <Chapters />
       <ProgressRuler />
       <XP />

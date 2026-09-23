@@ -152,6 +152,30 @@ export function makeCalendarTexture(opts: { title?: string; serif?: string; mono
   return finish(c);
 }
 
+/** A statistic for a glass shard: big serif value + wrapped sans label, on transparent. */
+export function makeStatTexture(value: string, label: string, fonts: { serif: string; sans: string }, color = "#ffffff") {
+  const [c, g] = canvas(1024, 640);
+  g.fillStyle = color;
+  g.textAlign = "center";
+  g.textBaseline = "alphabetic";
+  g.shadowColor = "rgba(255, 60, 40, 0.55)";
+  g.shadowBlur = 24;
+  g.font = `220px ${fonts.serif}`;
+  g.fillText(value, 512, 300);
+  g.shadowBlur = 0;
+  g.font = `500 44px ${fonts.sans}`;
+  // naive word wrap at ~26 chars
+  const words = label.split(" ");
+  const rows: string[] = [];
+  let row = "";
+  for (const w of words) {
+    if ((row + " " + w).trim().length > 26) { rows.push(row.trim()); row = w; } else row += " " + w;
+  }
+  rows.push(row.trim());
+  rows.slice(0, 3).forEach((r, i) => g.fillText(r, 512, 400 + i * 58));
+  return finish(c);
+}
+
 /** Text on a transparent canvas, using a CSS font family (e.g. a next/font variable). */
 export function makeTextTexture(
   lines: { text: string; size: number; family: string; italic?: boolean }[],

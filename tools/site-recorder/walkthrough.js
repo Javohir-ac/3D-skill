@@ -92,6 +92,8 @@ async function solveIntro(page, W, H, shot) {
     if (done === 'Explore') {
       await sleep(2500);
       await shot('finale');
+      const hsInfo = await page.$$eval('.hotspot', (els) => els.map((h) => { const r = h.getBoundingClientRect(); return `${h.textContent.trim()}@${Math.round(r.x)},${Math.round(r.y)} ${Math.round(r.width)}x${Math.round(r.height)}`; }));
+      log(`finale hotspots: ${hsInfo.length ? hsInfo.join(' | ') : 'NONE'}`);
       const hs = await page.$('.hotspot');
       // click by coordinates: ElementHandle.click() would scroll the page to 'reveal' the 3D-anchored element
       if (hs) { const bb = await hs.boundingBox(); await page.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2); await sleep(700); await shot('finale-card'); }

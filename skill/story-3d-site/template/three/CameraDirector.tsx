@@ -13,6 +13,8 @@ import type { CameraKey } from "@/story/types";
 // the camera is always gliding toward the sampled target (never static), and
 // beats can add shake. Scroll = playhead of a continuous "one-shot" film.
 const DEFAULT: CameraKey = { at: 0, pos: [0, 0, 6], look: [0, 0, 0], fov: 35 };
+/** Aspect ratio the camera keys were composed for. */
+const DESIGN_ASPECT = 16 / 9;
 
 export function CameraDirector() {
   const camera = useThree((s) => s.camera) as PerspectiveCamera;
@@ -42,7 +44,15 @@ export function CameraDirector() {
       pos.z,
     );
     camera.lookAt(look);
-    const fov = k.fov ?? 35;
+    // Portrait screens: keep (most of) the desktop HORIZONTAL framing, so the
+    // composition designed at 16:9 still fits a phone instead of overflowing.
+    const aspect = state.size.width / state.size.height;
+    let fov = k.fov ?? 35;
+    if (aspect < DESIGN_ASPECT) {
+      const hHalf = Math.atan(Math.tan((fov * Math.PI) / 360) * DESIGN_ASPECT);
+      const fitted = (Math.atan(Math.tan(hHalf) / aspect) * 360) / Math.PI;
+      fov = Math.min(95, fov + (fitted - fov) * 0.8);
+    }
     if (Math.abs(camera.fov - fov) > 0.01) {
       camera.fov = damp(camera.fov, fov, L, dt);
       camera.updateProjectionMatrix();

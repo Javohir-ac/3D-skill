@@ -26,19 +26,27 @@ Claude Code uchun skill: **Awwwards darajasidagi hikoyali (storytelling) 3D veb-
 | 2026-09-23 | Qaror: skill nomi **`story-3d-site`**, stek **Next.js 16 + R3F 9 + drei 10 + postprocessing + GSAP + Lenis + zustand** (foydalanuvchi: "nima texnologiya kerak bo'lsa foydalanaver") |
 | 2026-09-23 | **Shablon yozildi**: `skill/story-3d-site/template/` — 7 bobli demo hikoya, scroll dvigateli (Lenis), gate/TAP HOLD tizimi, 4 ta kinematik o'tish, color-grade postFX, effektlar kutubxonasi (bulutlar, zarrachalar, halqalar, ekran sinishi, shisha, yonish, nur ustunlari, shahar), HUD (progress, XP, boblar navigatsiyasi, CTA, motion toggle, hotspot kartochka), loader |
 | 2026-09-23 | Foydalanuvchi sinovi bo'yicha tuzatishlar: (1) gate'da cheksiz rekursiya (Maximum call stack) → re-entry guard; (2) scroll bilan gate'ni aylanib o'tish → barcha tugallanmagan gate'lar bo'yicha "qattiq devor"; (3) TAP HOLD ko'rinmas edi (oq fonda oq) → qorong'i shisha disk, progress halqa, ripple, "Press & hold / Space" ishorasi, fon xiralashadi; (4) **oq juda ko'p, ko'zni og'ritadi** → och boblar o'rta tonlarga, bloom threshold 0.85, oq chaqnashlar o'rniga yumshoq yalpiz rang, bulutlar kulrangroq. Test: headless Chrome (`gate-test.js`) — gate'ni o'tib bo'lmaydi, hold ishlaydi, xatolar yo'q |
+| 2026-09-23 | Foydalanuvchi so'rovi: "Zero darajasiga 3D modelsiz nima yetishmaydi — hammasini bajar, tugagach xabar ber". **Ovoz — kerak emas** (keyin kerak bo'lsa qo'shiladi). 3 bosqich bajarildi ↓ |
+| 2026-09-23 | **1-bosqich**: davomli qahramon obyekt (bitta shader: suyuq/yorilgan/shisha/nur, bob bo'yicha keyframe), kamera rejissyori (keyframe + "nafas" + shake), beat'lar (pulse/shake/flash/burst), harfma-harf tipografiya (script bosh harf "yoziladi"), kalendar teksturasi |
+| 2026-09-23 | **2-bosqich**: "Draw a circle" kirish (doira tanish), maxsus kursor + magnit tugmalar, har bobga shader fon (gradient/aurora/god rays/yulduzlar), yangi o'tishlar: `drain` (sepiya+grain), `burn` (ekran kuyadi), gate'lar uchun `drainCut`, `burnThrough` |
+| 2026-09-23 | **3-bosqich**: DOF (qahramonga fokus), linza iflosligi, radial rang siljishi, statistika 3D shisha ustida (+ SR ro'yxat, ko'rinadigan manbalar), barabanli loader, telefon giroskopi, hotspot'lar fixed qatlamda (oldin body'da scroll bo'lib ketardi), tik ekranda gorizontal kadrni saqlash |
+| 2026-09-23 | QA: walkthrough 1440×810 va 390×844 — kirish, 2 gate, final kartochka ishlaydi, konsol toza. `skill/story-3d-site/template/README.md` yozildi |
 
 ## 📍 Hozirgi holat
-Shablon (dvigatel) ishlaydi va foydalanuvchi sinovidan o'tmoqda. Foydalanuvchi fikri: "qolganlari oddiy elementlar bilan — yaxshi" (placeholder sahnalar hozircha qabul qilindi). Eslatma foydalanuvchidan: **oq/yorqin joylarni ko'paytirmang — ko'zni charchatadi**; TAP HOLD aniq ko'rinishi va aylanib o'tib bo'lmasligi kerak.
+Shablon Zero darajasiga yaqin "kino" dvigateli bilan tayyor (3D modelsiz). Foydalanuvchi natijani ko'rib chiqishi kutilmoqda.
+Eslatmalar foydalanuvchidan: **oq/yorqin joylarni ko'paytirmang** (ko'z charchaydi); TAP HOLD aniq ko'rinishi va aylanib o'tib bo'lmasligi shart; **ovoz hozircha yo'q**.
 
 Ishga tushirish: `cd skill/story-3d-site/template && npm install && npx next dev --port 3100`
 (Fedora'da npm ENETUNREACH bersa: `NODE_OPTIONS=--dns-result-order=ipv4first npm install`)
+Vizual QA: `tools/site-recorder/walkthrough.js http://localhost:3100 ./qa [w] [h]` (puppeteer-core kerak; Windows'da Chrome yo'lini `CHROME` env bilan bering).
 
 ## ⏭️ Keyingi qadamlar
 1. [x] Muhim kadrlarni rasm sifatida saqlash.
 2. [x] Skill nomi (`story-3d-site`) va stek (Next.js + R3F) tasdiqlandi.
 3. [x] `skill/story-3d-site/template/` — ishlaydigan shablon.
-4. [ ] Foydalanuvchi shablonni sinab bo'lishini kutish / qo'shimcha tuzatishlar.
-5. [ ] To'liq walkthrough testi (`tools/` ga `walkthrough.js` + `gate-test.js` ko'chirish) — skill ichida vizual QA uchun.
+4. [x] "Zero darajasi" yaxshilanishlari (3 bosqich) — bajarildi.
+5. [x] Walkthrough + gate testlari `tools/site-recorder/` da.
+5b. [ ] Foydalanuvchi fikri bo'yicha tuzatishlar (natijani ko'rib chiqadi).
 6. [ ] `SKILL.md` (ish tartibi: brif → ssenariy → shablondan loyiha → sahnalar → sayqal) + `references/*.md` (storytelling, transitions, effects, interactions, design-system, performance, accessibility).
 7. [ ] Test promptlar bilan sinov (skill bilan/skillsiz), foydalanuvchi bahosi, iteratsiya.
 8. [ ] `~/.claude/skills/story-3d-site/` ga o'rnatish (Fedora va Windows).

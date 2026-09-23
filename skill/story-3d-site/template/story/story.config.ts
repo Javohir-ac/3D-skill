@@ -27,7 +27,7 @@ export const story: StoryConfig = {
       scene: "intro",
       background: "#a9c9bc",
       backdrop: { top: "#c3dcd1", bottom: "#7fa999", accent: "#e4fff3", flow: 0.55, rays: 0.25 },
-      grade: { exposure: 0.94, saturation: 1.0, contrast: 1.02, tint: "#bff5dc", tintAmount: 0.06, bloom: 0.55, vignette: 0.35, grain: 0.05 },
+      grade: { exposure: 0.94, saturation: 1.0, contrast: 1.02, tint: "#bff5dc", tintAmount: 0.06, bloom: 0.55, vignette: 0.35, grain: 0.05, dof: 0.25, dirt: 0.5 },
       boundary: "drain",
       hero: [
         { at: 0, pos: [0, 0, 0], scale: 0.55, noise: 0.35, color: MINT, accent: MINT_LIGHT, glow: 0.1, spin: 0.25 },
@@ -58,7 +58,7 @@ export const story: StoryConfig = {
       scene: "dream",
       background: "#8fb3c4",
       backdrop: { top: "#a9c7d6", bottom: "#6f93a5", accent: "#ffe3ee", flow: 0.25, rays: 0.6 },
-      grade: { exposure: 0.92, saturation: 0.95, contrast: 1.02, tint: "#ffe3ee", tintAmount: 0.05, bloom: 0.45, vignette: 0.35, grain: 0.05 },
+      grade: { exposure: 0.92, saturation: 0.95, contrast: 1.02, tint: "#ffe3ee", tintAmount: 0.05, bloom: 0.45, vignette: 0.35, grain: 0.05, dof: 0.5, dirt: 0.6 },
       gate: { type: "hold", at: 0.9, label: "Hold", transition: "breakToDark", xp: 100 },
       hero: [
         { at: 0, pos: [-0.9, 0.3, 0], scale: 0.7, noise: 0.18, glow: 0.35, color: MINT, accent: MINT_LIGHT },
@@ -90,7 +90,7 @@ export const story: StoryConfig = {
       scene: "fracture",
       background: "#1a0203",
       backdrop: { top: "#2a0405", bottom: "#070000", accent: "#ff2a1a", flow: 0.5, rays: 0.3 },
-      grade: { exposure: 1.0, saturation: 1.15, contrast: 1.12, tint: "#ff1a1a", tintAmount: 0.35, bloom: 1.2, vignette: 0.55, grain: 0.12 },
+      grade: { exposure: 1.0, saturation: 1.15, contrast: 1.12, tint: "#ff1a1a", tintAmount: 0.35, bloom: 1.2, vignette: 0.55, grain: 0.12, dof: 0.35, dirt: 0.8 },
       hero: [
         { at: 0, pos: [1.25, -0.05, -0.4], scale: 0.8, noise: 0.05, crack: 1, glow: 0, glass: 0, color: "#3a0b0b", accent: RED, spin: 0.15 },
         { at: 1, pos: [1.1, 0.05, -0.2], scale: 1.0, noise: 0.04, crack: 1, spin: 0.1 },
@@ -118,8 +118,13 @@ export const story: StoryConfig = {
       scene: "evidence",
       background: "#170203",
       backdrop: { top: "#240304", bottom: "#050000", accent: "#ff3a20", flow: 0.35, rays: 0.4 },
-      grade: { exposure: 1.0, saturation: 1.1, contrast: 1.1, tint: "#ff2020", tintAmount: 0.3, bloom: 1.0, vignette: 0.55, grain: 0.12 },
+      grade: { exposure: 1.0, saturation: 1.1, contrast: 1.1, tint: "#ff2020", tintAmount: 0.3, bloom: 1.0, vignette: 0.55, grain: 0.12, dof: 0.15, dirt: 0.8 },
       boundary: "burn",
+      stats: [
+        { value: "4h 37m", label: "average daily screen time", source: { label: "replace with a real source", href: "#" } },
+        { value: "62%", label: "say they have no time for what matters", source: { label: "replace with a real source", href: "#" } },
+        { value: "11×", label: "phone pickups before lunch", source: { label: "replace with a real source", href: "#" } },
+      ],
       hero: [
         { at: 0, pos: [0, 0, -2.5], scale: 0.7, crack: 1, color: "#3a0b0b", accent: RED, spin: 0.08 },
         { at: 0.6, pos: [0.4, -0.2, -5], scale: 0.5, crack: 1 },
@@ -137,10 +142,7 @@ export const story: StoryConfig = {
         { at: 0.66, fx: "pulse" },
       ],
       lines: [
-        { text: "4h 37m", style: "serif", size: "xxl", at: [0.02, 0.3], anchor: "tl", tag: "h2" },
-        { text: "average daily screen time", style: "sans", size: "sm", at: [0.02, 0.3], anchor: "tl", source: { label: "replace with a real source", href: "#" } },
-        { text: "62%", style: "serif", size: "xxl", at: [0.32, 0.6], anchor: "br" },
-        { text: "say they have no time for what matters", style: "sans", size: "sm", at: [0.32, 0.6], anchor: "br", source: { label: "replace with a real source", href: "#" } },
+        { text: "The *N*umbers", style: "serif", size: "lg", at: [0.0, 0.14], anchor: "tl", tag: "h2" },
         { text: "*O*ne life", style: "serif", size: "xxl", at: [0.64, 0.84], anchor: "center" },
         { text: "burning, one notification at a time", style: "mono", size: "sm", at: [0.72, 0.98], anchor: "bottom" },
       ],
@@ -152,7 +154,7 @@ export const story: StoryConfig = {
       scene: "charge",
       background: "#030605",
       backdrop: { top: "#06110c", bottom: "#010302", accent: "#1fbf74", flow: 0.35, stars: 1 },
-      grade: { exposure: 1.0, saturation: 1.0, contrast: 1.05, tint: "#35ff9a", tintAmount: 0.12, bloom: 1.6, vignette: 0.5, grain: 0.1 },
+      grade: { exposure: 1.0, saturation: 1.0, contrast: 1.05, tint: "#35ff9a", tintAmount: 0.12, bloom: 1.6, vignette: 0.5, grain: 0.1, dof: 0, dirt: 1 },
       gate: { type: "hold", at: 0.82, label: "Hold", transition: "implodeToLight", xp: 100 },
       hero: [
         { at: 0, pos: [0, 0, 0], scale: 0.02, crack: 0, glow: 2, noise: 0, glass: 0, color: "#ffffff", accent: "#39ff9f", spin: 1 },
@@ -180,7 +182,7 @@ export const story: StoryConfig = {
       scene: "reveal",
       background: "#8eaebd",
       backdrop: { top: "#a7c4d2", bottom: "#7e9fae", accent: "#eaf6ff", flow: 0.2, rays: 0.5 },
-      grade: { exposure: 0.95, saturation: 1.0, contrast: 1.02, tint: "#dff2ff", tintAmount: 0.04, bloom: 0.35, vignette: 0.3, grain: 0.04 },
+      grade: { exposure: 0.95, saturation: 1.0, contrast: 1.02, tint: "#dff2ff", tintAmount: 0.04, bloom: 0.35, vignette: 0.3, grain: 0.04, dof: 0.2, dirt: 0.3 },
       boundary: "cut",
       camera: [
         { at: 0, pos: [0, 0, 6], look: [0, 0, -2], fov: 40 },
@@ -206,11 +208,11 @@ export const story: StoryConfig = {
       scene: "finale",
       background: "#0d1512",
       backdrop: { top: "#16261f", bottom: "#050907", accent: "#39ff9f", flow: 0.3, stars: 0.5 },
-      grade: { exposure: 1.0, saturation: 1.05, contrast: 1.0, tint: "#9dffd0", tintAmount: 0.05, bloom: 0.9, vignette: 0.35, grain: 0.05 },
+      grade: { exposure: 1.0, saturation: 1.05, contrast: 1.0, tint: "#9dffd0", tintAmount: 0.05, bloom: 0.9, vignette: 0.35, grain: 0.05, dof: 0.3, dirt: 0.4 },
       hero: [{ at: 0, pos: [0, 0.9, 0], scale: 0.28, noise: 0.15, crack: 0, glow: 1.2, glass: 0.55, color: MINT, accent: MINT_LIGHT, spin: 0.4 }],
       camera: [
-        { at: 0, pos: [0, 0.8, 7.5], look: [0, -0.3, 0], fov: 38 },
-        { at: 1, pos: [0.6, 1.2, 6.6], look: [0, -0.4, 0] },
+        { at: 0, pos: [0, 1.4, 9.5], look: [0, -0.6, -1.5], fov: 38 },
+        { at: 1, pos: [0.8, 1.8, 8.6], look: [0, -0.7, -1.5] },
       ],
       beats: [{ at: 0.15, fx: "burst", strength: 0.8 }],
       lines: [

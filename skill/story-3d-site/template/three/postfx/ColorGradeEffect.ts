@@ -16,9 +16,20 @@ const fragment = /* glsl */ `
   uniform vec3 uFlashColor;
   uniform float uGlitch;
   uniform float uDrain;
+  uniform float uDirt;
   uniform float uTime;
 
   float h1(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
+  float h2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float n2(vec2 p) { vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(h2(i), h2(i + vec2(1, 0)), u.x), mix(h2(i + vec2(0, 1)), h2(i + vec2(1, 1)), u.x), u.y); }
+  // static lens smudges: soft blotches + a few streaks, only visible over bright light
+  float lensDirt(vec2 uv) {
+    float blotch = n2(uv * 6.0) * n2(uv * 13.0 + 4.0);
+    float specks = smoothstep(0.82, 1.0, n2(uv * 42.0));
+    float streak = smoothstep(0.6, 1.0, n2(vec2(uv.x * 3.0 + uv.y * 9.0, uv.y * 1.5)));
+    return blotch * 1.4 + specks * 0.5 + streak * 0.35;
+  }
 
   void mainUv(inout vec2 uv) {
     if (uGlitch > 0.001) {
@@ -47,6 +58,10 @@ const fragment = /* glsl */ `
       c = mix(c, crushed, strobe * uGlitch);
     }
 
+    // lens dirt catches the light: bright parts of the frame reveal the smudges
+    float bright = smoothstep(0.55, 1.0, dot(c, vec3(0.2126, 0.7152, 0.0722)));
+    c += lensDirt(uv) * bright * uDirt * 0.35 * (c + 0.2);
+
     c = mix(c, uCurtainColor, clamp(uCurtain, 0.0, 1.0));
     c = mix(c, uFlashColor, clamp(uFlash, 0.0, 1.0));
     outputColor = vec4(clamp(c, 0.0, 1.0), inputColor.a);
@@ -69,6 +84,7 @@ export class ColorGradeEffect extends Effect {
         ["uFlashColor", new Uniform(new Color("#ffffff"))],
         ["uGlitch", new Uniform(0)],
         ["uDrain", new Uniform(0)],
+        ["uDirt", new Uniform(0)],
         ["uTime", new Uniform(0)],
       ]),
     });

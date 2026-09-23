@@ -31,6 +31,10 @@ export interface Grade {
   bloom?: number;      // bloom intensity
   vignette?: number;   // vignette darkness 0..1
   grain?: number;      // film grain opacity 0..1
+  /** Depth of field around the hero (0 = sharp, 1 = strong bokeh). */
+  dof?: number;
+  /** Lens dirt revealed by bright areas 0..1 */
+  dirt?: number;
 }
 
 export type TransitionName = "breakToDark" | "implodeToLight" | "drainCut" | "burnThrough" | "whiteout" | "blackout";
@@ -90,6 +94,12 @@ export interface Beat {
   strength?: number;
 }
 
+export interface Stat {
+  value: string;
+  label: string;
+  source?: { label: string; href: string };
+}
+
 export type SceneName =
   | "intro" | "dream" | "fracture" | "evidence" | "charge" | "reveal" | "finale";
 
@@ -104,6 +114,9 @@ export interface Chapter {
   background: string;
   grade: Grade;
   lines: StoryLine[];
+  /** Statistics rendered ON 3D glass shards (the evidence scene). The HTML keeps
+   *  them as a screen-reader list and shows the sources as visible footnotes. */
+  stats?: Stat[];
   hero?: HeroKey[];
   camera?: CameraKey[];
   beats?: Beat[];

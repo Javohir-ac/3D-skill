@@ -46,6 +46,26 @@ export default function Chapters() {
             {c.lines.map((l, j) => (
               <Line key={j} line={l} chapter={i} first={j === 0} />
             ))}
+            {c.stats && (
+              <>
+                {/* the numbers are drawn on glass in 3D; keep them readable for SR/SEO */}
+                <ul className="sr-only">
+                  {c.stats.map((s) => (
+                    <li key={s.value}>{s.value} — {s.label}</li>
+                  ))}
+                </ul>
+                <div className="line anchor-bl sources" data-line data-chapter={i} data-a={0} data-b={1} style={{ opacity: 0 }}>
+                  <p className="sources-title">Sources</p>
+                  {c.stats.map((s, k) =>
+                    s.source ? (
+                      <a key={k} className="source" href={s.source.href} target="_blank" rel="noreferrer">
+                        {k + 1}. {s.source.label}
+                      </a>
+                    ) : null,
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </section>
       ))}
