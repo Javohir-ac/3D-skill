@@ -3,9 +3,11 @@ import dynamic from "next/dynamic";
 import Chapters from "./Chapters";
 import { Cursor } from "./ui/Cursor";
 import { DrawIntro } from "./ui/DrawIntro";
+import { FrostIntro } from "./ui/FrostIntro";
 import { HoldGate } from "./ui/HoldGate";
 import { ChapterNav, CTA, HotspotCard, MotionToggle, ProgressRuler, XP } from "./ui/Hud";
 import { Loader } from "./ui/Loader";
+import { NotificationWall } from "./ui/NotificationWall";
 
 // WebGL only runs in the browser; the HTML story (Chapters) is server-rendered.
 const Experience = dynamic(() => import("@/three/Experience"), { ssr: false });
@@ -24,6 +26,8 @@ export default function Story() {
       <MotionToggle />
       <HoldGate />
       <DrawIntro />
+      <FrostIntro />
+      <NotificationWall />
       <HotspotCard />
       <Loader />
       <Cursor />

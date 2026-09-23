@@ -10,7 +10,25 @@ fs.mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // Solve an optional "draw a circle" intro with real mouse input.
 async function solveIntro(page, W, H, shot) {
-  if (!(await page.$('.intro'))) return false;
+  // notification-wall intro: swipe across the screen until it clears
+  if (await page.$('.nwall')) {
+    await new Promise((res) => setTimeout(res, 900));
+    if (shot) await shot('intro-wall');
+    for (let pass = 0; pass < 24 && (await page.$(".nwall")); pass++) {
+      const y = H * (0.06 + (pass % 12) * 0.075);
+      const [x0, x1] = pass % 2 ? [W * 0.95, W * 0.05] : [W * 0.05, W * 0.95];
+      await page.mouse.move(x0, y);
+      await page.mouse.down();
+      for (let i = 1; i <= 24; i++) { await page.mouse.move(x0 + ((x1 - x0) * i) / 24, y + Math.sin(i / 3) * 40); await new Promise((res) => setTimeout(res, 10)); }
+      await page.mouse.up();
+      if (shot && pass === 2) await shot('intro-swiping');
+      await new Promise((res) => setTimeout(res, 120));
+    }
+    await page.waitForFunction(() => !document.querySelector('.nwall'), { timeout: 8000 });
+    return true;
+  }
+  const drawSel = (await page.$('.frost-intro')) ? '.frost-intro' : (await page.$('.intro')) ? '.intro' : null;
+  if (!drawSel) return false;
   await new Promise((res) => setTimeout(res, 1200)); // let the intro mount its listeners
   if (shot) await shot('intro');
   const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.2;
@@ -23,7 +41,7 @@ async function solveIntro(page, W, H, shot) {
       await new Promise((res) => setTimeout(res, 12));
     }
     await page.mouse.up();
-    const closed = await page.waitForFunction(() => !document.querySelector('.intro'), { timeout: 3000 }).then(() => true, () => false);
+    const closed = await page.waitForFunction((sel) => !document.querySelector(sel), { timeout: 4000 }, drawSel).then(() => true, () => false);
     if (closed) return true;
   }
   throw new Error('intro circle was not recognised after 3 attempts');

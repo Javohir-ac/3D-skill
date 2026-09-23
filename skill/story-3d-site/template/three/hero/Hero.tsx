@@ -52,7 +52,7 @@ export function Hero() {
     const L = 3.2;
     const fx = live.fx;
 
-    if (k.pos) c.pos.set(damp(c.pos.x, k.pos[0], L, dt), damp(c.pos.y, k.pos[1], L, dt), damp(c.pos.z, k.pos[2], L, dt));
+    if (k.pos) c.pos.set(damp(c.pos.x, k.pos[0], L, dt), damp(c.pos.y, k.pos[1], L, dt), damp(c.pos.z, k.pos[2] + fx.introPush * 2.2, L, dt));
     // gate "charge": the hero is the core of the implosion / explosion
     const implode = Math.min(1, fx.charge * 2);
     const explode = Math.max(0, fx.charge * 2 - 1);

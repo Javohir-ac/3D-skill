@@ -35,6 +35,11 @@ export const live = {
     drain: 0, // colour drains to sepia/grey (0..1)
     grainBoost: 0, // extra film grain (0..1)
     burn: 0, // full-screen burn overlay coverage (0..1)
+    frost: 0, // intro frost pane opacity (0..1)
+    introClear: 0, // notification-wall intro: fraction cleared (0..1)
+    introPush: 0, // hero pushes toward the glass from behind (0..1)
+    shatterColor: new Color("#000000"),
+    shatterAlpha: 1,
   },
 };
 
@@ -55,4 +60,5 @@ export function resetFx() {
   f.drain = 0;
   f.grainBoost = 0;
   f.burn = 0;
+  f.introPush = 0;
 }

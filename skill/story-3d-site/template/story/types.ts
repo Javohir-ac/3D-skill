@@ -79,6 +79,31 @@ export interface HeroKey {
   spin?: number;
 }
 
+/**
+ * PARTICLE LANGUAGE — the story's visual voice. ~25k particles flow from one
+ * shape into the next as the chapter progresses (step keys, not blended: when
+ * a key's `at` is passed, the particles morph into its shape).
+ * shape: "icon:clock|hourglass|plane|book|people|sun|phone|bell",
+ *        "text:62%" (serif), "word:Aurora" (bold sans),
+ *        "dust" | "embers" | "sphere" | "globe" | "core" | "aurora" | "galaxy"
+ */
+export interface ParticleKey {
+  at: number;
+  shape: string;
+  /** Two colours; each particle picks a blend between them. */
+  colors?: [string, string];
+  size?: number;
+  pos?: Vec3;
+  scale?: number;
+  /** Idle spin around Y (rad/s). */
+  spin?: number;
+  /** Idle drift / shimmer amount. */
+  flow?: number;
+  /** Additive glow (dark scenes) vs normal blending (light scenes). Default true. */
+  additive?: boolean;
+  opacity?: number;
+}
+
 /** Camera choreography: keyframes sampled by chapter progress (damped). */
 export interface CameraKey {
   at: number;
@@ -118,6 +143,7 @@ export interface Chapter {
    *  them as a screen-reader list and shows the sources as visible footnotes. */
   stats?: Stat[];
   hero?: HeroKey[];
+  particles?: ParticleKey[];
   camera?: CameraKey[];
   beats?: Beat[];
   gate?: Gate;
@@ -143,7 +169,13 @@ export interface Hotspot {
 
 /** Optional opening interaction (Zero's "draw a zero"): the story starts once solved. */
 export interface Intro {
-  type: "draw-circle";
+  /** Opening interaction variants (pick per brief):
+   *  "frost"         — the screen is frosted glass; drawing wipes it clear (like a fogged
+   *                    window); a drawn circle becomes a clock face, then the glass shatters.
+   *  "notifications" — swipe away a wall of buzzing notifications; they dissolve and the
+   *                    story particles gather (best for attention / screen-time stories).
+   *  "draw-circle"   — minimal: draw a circle on an empty screen (Zero's "draw a zero"). */
+  type: "frost" | "notifications" | "draw-circle";
   prompt: string;
   hint?: string;
   xp?: number;

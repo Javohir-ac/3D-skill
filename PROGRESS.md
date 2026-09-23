@@ -31,14 +31,17 @@ Claude Code uchun skill: **Awwwards darajasidagi hikoyali (storytelling) 3D veb-
 | 2026-09-23 | **2-bosqich**: "Draw a circle" kirish (doira tanish), maxsus kursor + magnit tugmalar, har bobga shader fon (gradient/aurora/god rays/yulduzlar), yangi o'tishlar: `drain` (sepiya+grain), `burn` (ekran kuyadi), gate'lar uchun `drainCut`, `burnThrough` |
 | 2026-09-23 | **3-bosqich**: DOF (qahramonga fokus), linza iflosligi, radial rang siljishi, statistika 3D shisha ustida (+ SR ro'yxat, ko'rinadigan manbalar), barabanli loader, telefon giroskopi, hotspot'lar fixed qatlamda (oldin body'da scroll bo'lib ketardi), tik ekranda gorizontal kadrni saqlash |
 | 2026-09-23 | QA: walkthrough 1440×810 va 390×844 — kirish, 2 gate, final kartochka ishlaydi, konsol toza. `skill/story-3d-site/template/README.md` yozildi |
+| 2026-09-23 | Foydalanuvchi: Zero bilan solishtirganda **kirish "wow" emas** va **1→2 bob o'rtasida mantiqiy bog'liqlik yo'q**. Zero'ni nusxalash shart emas — o'z uslubimiz. Sinovdan o'tgan g'oyalar: (a) **zarrachalar tili** (26k zarracha shakldan shaklga oqadi) + **bildirishnomalar devori** kirishi — foydalanuvchiga **yoqmadi** ("oldingi mavzu yaxshi edi"); (b) **muz (frost) kirishi** — **tanlandi** |
+| 2026-09-23 | Yakuniy holat: 3-bosqichdagi hikoya (qahramon shar, bulutlar, yorilish, shisha, halqalar, shahar) tiklandi + **frost kirish**: ekran muzli shisha, chizish muzni artadi (ingichka ~10px chiziq — foydalanuvchi qalin chiziqni yoqtirmadi), doira → soat siferblati (strelkalar aylanadi), qahramon shishaga bosiladi → shisha sinib uchadi. Zarrachalar tizimi (`three/particles/`) va bildirishnomalar devori (`components/ui/NotificationWall.tsx`) **muqobil variant** sifatida kutubxonada qoldi |
 
 ## 📍 Hozirgi holat
-Shablon Zero darajasiga yaqin "kino" dvigateli bilan tayyor (3D modelsiz). Foydalanuvchi natijani ko'rib chiqishi kutilmoqda.
-Eslatmalar foydalanuvchidan: **oq/yorqin joylarni ko'paytirmang** (ko'z charchaydi); TAP HOLD aniq ko'rinishi va aylanib o'tib bo'lmasligi shart; **ovoz hozircha yo'q**.
+Shablon: 3-bosqich hikoyasi + frost kirish. Foydalanuvchi ko'rib chiqmoqda.
+**Keyingi katta qadam (foydalanuvchi qarori):** skill yozishdan OLDIN kerakli **3D modellarni o'zimiz topamiz / yasaymiz / sinab ko'ramiz**, keyin skill yoziladi.
+Eslatmalar: oq/yorqin joylarni ko'paytirmang; TAP HOLD aylanib o'tilmasin; ovoz hozircha yo'q; frost chizig'i ingichka bo'lsin; har bob o'tishida mantiqiy bog'liqlik bo'lsin (sabab → oqibat).
 
 Ishga tushirish: `cd skill/story-3d-site/template && npm install && npx next dev --port 3100`
 (Fedora'da npm ENETUNREACH bersa: `NODE_OPTIONS=--dns-result-order=ipv4first npm install`)
-Vizual QA: `tools/site-recorder/walkthrough.js http://localhost:3100 ./qa [w] [h]` (puppeteer-core kerak; Windows'da Chrome yo'lini `CHROME` env bilan bering).
+Vizual QA: `tools/site-recorder/walkthrough.js http://localhost:3100 ./qa [w] [h]` (puppeteer-core kerak; Windows'da Chrome yo'lini `CHROME` env bilan bering). Testlar frost / draw-circle / notifications kirishlarini avtomatik yechadi.
 
 ## ⏭️ Keyingi qadamlar
 1. [x] Muhim kadrlarni rasm sifatida saqlash.
@@ -46,7 +49,8 @@ Vizual QA: `tools/site-recorder/walkthrough.js http://localhost:3100 ./qa [w] [h
 3. [x] `skill/story-3d-site/template/` — ishlaydigan shablon.
 4. [x] "Zero darajasi" yaxshilanishlari (3 bosqich) — bajarildi.
 5. [x] Walkthrough + gate testlari `tools/site-recorder/` da.
-5b. [ ] Foydalanuvchi fikri bo'yicha tuzatishlar (natijani ko'rib chiqadi).
+5b. [x] Kirish "wow" + boblar mantiqi → frost kirish (tanlandi); zarrachalar/bildirishnomalar → muqobil variantlar.
+5c. [ ] **3D modellar**: kerakli modellarni topish (CC0: Poly Haven, Kenney, Quaternius va h.k. — yuklab olishdan oldin foydalanuvchi ruxsati) yoki yasash (Blender skript / three.js prosedural), sinab ko'rish, shablonga ulash.
 6. [ ] `SKILL.md` (ish tartibi: brif → ssenariy → shablondan loyiha → sahnalar → sayqal) + `references/*.md` (storytelling, transitions, effects, interactions, design-system, performance, accessibility).
 7. [ ] Test promptlar bilan sinov (skill bilan/skillsiz), foydalanuvchi bahosi, iteratsiya.
 8. [ ] `~/.claude/skills/story-3d-site/` ga o'rnatish (Fedora va Windows).

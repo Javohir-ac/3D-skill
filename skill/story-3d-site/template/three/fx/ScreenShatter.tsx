@@ -17,6 +17,7 @@ const vert = /* glsl */ `
   attribute vec3 aCenter;
   attribute vec4 aRand;
   varying float vFade;
+  varying float vLight;
   vec3 rotate(vec3 v, vec3 axis, float a) {
     float s = sin(a), c = cos(a);
     return v * c + cross(axis, v) * s + axis * dot(axis, v) * (1.0 - c);
@@ -32,15 +33,19 @@ const vert = /* glsl */ `
     vec3 c = aCenter + vec3(dir * t * (0.6 + aRand.y * 1.4), t * (0.4 + aRand.z * 0.8));
     c.y -= t * t * 0.6;
     vFade = 1.0 - smoothstep(0.75, 1.0, t);
+    vLight = abs(sin(t * (3.0 + aRand.x * 4.0) + aRand.y * 6.0));
     gl_Position = projectionMatrix * modelViewMatrix * vec4(c + local * (1.0 - t * 0.35), 1.0);
   }
 `;
 const frag = /* glsl */ `
   uniform vec3 uColor;
+  uniform float uAlpha;
   varying float vFade;
+  varying float vLight;
   void main() {
     if (vFade < 0.01) discard;
-    gl_FragColor = vec4(uColor, vFade);
+    // facets catch a little light as they tumble (reads as glass, not paper)
+    gl_FragColor = vec4(uColor * (0.85 + vLight * 0.35), vFade * uAlpha);
   }
 `;
 
@@ -88,7 +93,7 @@ export function ScreenShatter({ color = "#000000", distance = 1 }: { color?: str
     const material = new ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
-      uniforms: { uT: { value: 0 }, uColor: { value: new Color(color) } },
+      uniforms: { uT: { value: 0 }, uColor: { value: new Color(color) }, uAlpha: { value: 1 } },
       transparent: true,
       depthTest: false,
       depthWrite: false,
@@ -102,6 +107,8 @@ export function ScreenShatter({ color = "#000000", distance = 1 }: { color?: str
     m.visible = live.fx.shatterArmed > 0.5;
     if (!m.visible) return;
     material.uniforms.uT.value = live.fx.shatter;
+    material.uniforms.uColor.value.copy(live.fx.shatterColor);
+    material.uniforms.uAlpha.value = live.fx.shatterAlpha;
     // glue to camera, scaled to exactly cover the viewport at `distance`
     const fov = ((camera as { fov?: number }).fov ?? 35) * (Math.PI / 180);
     const h = Math.tan(fov / 2) * distance * 1.02;

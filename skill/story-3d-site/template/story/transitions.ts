@@ -19,6 +19,8 @@ const builders: Record<TransitionName, Builder> = {
   // total darkness, then the darkness shatters like glass revealing the new world.
   breakToDark(tl, fx, { jump, reduced }) {
     fx.curtainColor.set("#000000");
+    fx.shatterColor.set("#000000");
+    fx.shatterAlpha = 1;
     if (!reduced) {
       tl.to(fx, { glitch: 1, rgbShift: 1, duration: 0.06 })
         .to(fx, { glitch: 0.15, duration: 0.09, repeat: 5, yoyo: true, ease: "steps(1)" })

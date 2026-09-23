@@ -14,7 +14,8 @@ const MINT_LIGHT = "#9dffd0";
 const RED = "#ff3b2f";
 
 export const story: StoryConfig = {
-  intro: { type: "draw-circle", prompt: "Draw a circle to begin", hint: "your first hour starts here", xp: 100 },
+  // intro variants: "frost" (chosen) · "notifications" · "draw-circle" — see types.ts → Intro
+  intro: { type: "frost", prompt: "Draw a circle on the glass", hint: "wipe the frost away", xp: 100 },
   brand: "Aurora",
   description: "Aurora — a demo storytelling site built with the story-3d-site template.",
   cta: { label: "Join the waitlist", href: "#join" },

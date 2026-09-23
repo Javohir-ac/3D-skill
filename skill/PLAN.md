@@ -37,3 +37,15 @@ Test promptlar (taklif): "kofe brendi uchun hikoyali 3D sayt", "dasturchi portfo
 
 ## Vaqt taxmini
 Birinchi versiya ≈ 2.5–3.5 soat; sinovlar bilan to'liq ≈ 5–7 soat.
+
+## Kirish (intro) variantlari — skill brifga qarab tanlaydi
+| `intro.type` | Qachon | Holat |
+|---|---|---|
+| `frost` | universal, "oyna/vaqt/tuman" metaforasi; eng kuchli birinchi taassurot | ✅ demo'da tanlangan |
+| `notifications` | e'tibor / ekran vaqti / shovqin haqidagi hikoyalar | muqobil (foydalanuvchiga demo sifatida yoqmadi) |
+| `draw-circle` | minimal, brend shakli doira bo'lsa (Zero "draw a zero") | muqobil |
+
+## Vizual til variantlari
+- **Qahramon obyekt** (`three/hero`) — bitta shader obyekt butun hikoya bo'ylab shakl o'zgartiradi. ✅ demo
+- **Zarrachalar tili** (`three/particles`, `chapter.particles`) — 26k zarracha belgi/matn/3D shakllar orasida oqadi. Muqobil: mahsulot ikonografiyaga boy bo'lsa yaxshi; och fonlarda to'q "siyoh" zarrachalar (additive: false) kerak.
+- Saboq: foydalanuvchi uchun **hikoya mazmuni va mantig'i** uslubdan muhimroq — yangi uslub sinalganda eski hikoyani saqlab qolish kerak.

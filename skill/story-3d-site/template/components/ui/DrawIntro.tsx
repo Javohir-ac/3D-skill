@@ -44,7 +44,7 @@ export function DrawIntro() {
   const [solved, setSolved] = useState(false);
 
   useEffect(() => {
-    if (!intro || !ready || done) return;
+    if (intro?.type !== "draw-circle" || !ready || done) return;
     const c = canvas.current!;
     const g = c.getContext("2d")!;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -124,7 +124,7 @@ export function DrawIntro() {
     };
   }, [intro, ready, done, finishIntro, reduced]);
 
-  if (!intro || !ready || done) return null;
+  if (intro?.type !== "draw-circle" || !ready || done) return null;
   const skip = () => {
     finishIntro(0);
     startScroll();

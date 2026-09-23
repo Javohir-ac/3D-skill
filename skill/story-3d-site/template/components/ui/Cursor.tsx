@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import { live } from "@/lib/live";
 import { useStory } from "@/lib/store";
-import { story } from "@/story/story.config";
 
 // Custom cursor: a precise dot + a lagging ring that reacts to what it is over
 // (links/buttons → grows, gate → "hold", intro → "draw", finale scene → "drag").
@@ -44,15 +43,14 @@ export function Cursor() {
 
       // state from what is under the pointer
       const el = document.elementFromPoint(pos.x, pos.y) as HTMLElement | null;
-      const s = useStory.getState();
       let mode = "";
-      if (el?.closest(".intro")) mode = "draw";
+      if (el?.closest(".intro, .frost-intro")) mode = "draw";
+      else if (el?.closest(".nwall") && !el.closest("button")) mode = "swipe";
       else if (el?.closest(".gate-btn")) mode = "hold";
       else if (el?.closest("a, button, [role=button]")) mode = "link";
-      else if (story.chapters[s.active]?.scene === "finale" && !s.hotspot) mode = "drag";
       if (ring.current && ring.current.dataset.mode !== mode) {
         ring.current.dataset.mode = mode;
-        if (label.current) label.current.textContent = mode === "hold" ? "Hold" : mode === "draw" ? "Draw" : mode === "drag" ? "Drag" : "";
+        if (label.current) label.current.textContent = mode === "hold" ? "Hold" : mode === "draw" ? "Draw" : mode === "drag" ? "Drag" : mode === "swipe" ? "Swipe" : "";
       }
 
       // magnetic elements

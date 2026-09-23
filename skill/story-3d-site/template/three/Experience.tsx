@@ -10,6 +10,8 @@ import { Backdrop } from "./Backdrop";
 import { CameraDirector } from "./CameraDirector";
 import { CameraRig } from "./CameraRig";
 import { Hero } from "./hero/Hero";
+import { ParticleStory } from "./particles/ParticleStory";
+import { FrostPane } from "./fx/FrostPane";
 import { ScreenBurn } from "./fx/ScreenBurn";
 import { ScreenShatter } from "./fx/ScreenShatter";
 import { PostFX } from "./postfx/PostFX";
@@ -76,12 +78,15 @@ export default function Experience() {
         <CameraDirector />
         <CameraRig>
           <Hero />
+          {/* particle language is optional — only mounted when a chapter uses it */}
+          {story.chapters.some((c) => c.particles?.length) && <ParticleStory />}
           <Suspense fallback={null}>
             <Scenes />
           </Suspense>
         </CameraRig>
         <ScreenShatter />
         <ScreenBurn />
+        <FrostPane />
         <PostFX />
         <AdaptiveDpr pixelated={false} />
         <LoadWatcher />
