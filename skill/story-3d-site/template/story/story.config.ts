@@ -90,7 +90,7 @@ export const story: StoryConfig = {
       grade: { exposure: 0.95, saturation: 1.0, contrast: 1.02, tint: "#dff2ff", tintAmount: 0.04, bloom: 0.35, vignette: 0.3, grain: 0.04 },
       boundary: "cut",
       lines: [
-        { text: "*I*ntroducing", style: "serif", size: "xl", at: [0.02, 0.3], anchor: "center", tag: "h2" },
+        { text: "*I*ntroducing", style: "serif", size: "xl", at: [0, 0.3], anchor: "center", tag: "h2" },
         { text: "Aurora", style: "sans", size: "xxl", at: [0.3, 0.55], anchor: "center", tag: "h2" },
         { text: "where time gets *R*eal", style: "serif", size: "xl", at: [0.58, 0.8], anchor: "center" },
         { text: "*R*eal hours, back to you", style: "serif", size: "lg", at: [0.82, 1.0], anchor: "center" },

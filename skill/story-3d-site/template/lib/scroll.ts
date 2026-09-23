@@ -70,7 +70,9 @@ function update(y: number) {
   let amount = 0;
   for (let i = 0; i < chapters.length - 1; i++) {
     const kind = chapters[i].boundary ?? "black";
-    if (kind === "cut") continue;
+    // Gated boundaries are crossed by the gate cinematic, which lands exactly on
+    // the boundary — a scroll curtain there would leave the screen stuck dark.
+    if (kind === "cut" || chapters[i].gate) continue;
     const d = Math.abs(y - top(i + 1)) / vh;
     const a = 1 - smoothstep(0, 0.45, d);
     if (a > amount) {
