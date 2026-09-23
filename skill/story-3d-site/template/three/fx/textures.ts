@@ -102,6 +102,45 @@ export function makeBeamTexture() {
   return finish(c);
 }
 
+/**
+ * Procedural MATCAP (lit-sphere) texture: a sculpted "clay" look without any
+ * lights — the technique Zero uses for its hands. base = mid tone, light = key
+ * highlight (upper-left), rim = back-light around the silhouette, dark = core shadow.
+ */
+export function makeMatcapTexture({ base = "#58c79a", light = "#e9fff4", rim = "#bfffe0", dark = "#0e3b2b" } = {}) {
+  const [c, g] = canvas(256, 256);
+  const body = g.createRadialGradient(100, 90, 10, 128, 128, 128);
+  body.addColorStop(0, light);
+  body.addColorStop(0.35, base);
+  body.addColorStop(0.85, dark);
+  body.addColorStop(1, dark);
+  g.fillStyle = body;
+  g.beginPath();
+  g.arc(128, 128, 128, 0, Math.PI * 2);
+  g.fill();
+  // rim light: bright ring hugging the edge, strongest lower-right
+  const rimG = g.createRadialGradient(128, 128, 96, 128, 128, 128);
+  rimG.addColorStop(0, "rgba(0,0,0,0)");
+  rimG.addColorStop(0.75, "rgba(0,0,0,0)");
+  rimG.addColorStop(1, rim);
+  g.globalCompositeOperation = "lighter";
+  g.globalAlpha = 0.55;
+  g.fillStyle = rimG;
+  g.beginPath();
+  g.arc(128, 128, 128, 0, Math.PI * 2);
+  g.fill();
+  // small specular hotspot
+  g.globalAlpha = 0.6;
+  const spec = g.createRadialGradient(92, 80, 0, 92, 80, 26);
+  spec.addColorStop(0, "rgba(255,255,255,1)");
+  spec.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = spec;
+  g.fillRect(0, 0, 256, 256);
+  g.globalAlpha = 1;
+  g.globalCompositeOperation = "source-over";
+  return finish(c);
+}
+
 /** A paper calendar page whose days are crossed out — "someday" never arrives. */
 export function makeCalendarTexture(opts: { title?: string; serif?: string; mono?: string } = {}) {
   const [c, g] = canvas(768, 960);
