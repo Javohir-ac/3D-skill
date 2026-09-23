@@ -1,0 +1,125 @@
+import { CanvasTexture, SRGBColorSpace, type Texture } from "three";
+import { rand } from "@/lib/math";
+
+// Procedural textures so the template runs with zero binary assets.
+// Swap any of these for real images (KTX2/WebP atlases) in production.
+
+function canvas(w: number, h: number) {
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  return [c, c.getContext("2d")!] as const;
+}
+
+function finish(c: HTMLCanvasElement): Texture {
+  const t = new CanvasTexture(c);
+  t.colorSpace = SRGBColorSpace;
+  t.anisotropy = 4;
+  t.needsUpdate = true;
+  return t;
+}
+
+/** 2×2 atlas of soft cumulus sprites. Returns texture + UV rects [x, y, w, h]. */
+export function makeCloudAtlas(size = 1024) {
+  const [c, g] = canvas(size, size);
+  const cell = size / 2;
+  const rects: [number, number, number, number][] = [];
+  for (let k = 0; k < 4; k++) {
+    const ox = (k % 2) * cell;
+    const oy = Math.floor(k / 2) * cell;
+    // base: grey underside puffs (volume), then white tops shifted up
+    for (let pass = 0; pass < 2; pass++) {
+      const puffs = 46;
+      for (let i = 0; i < puffs; i++) {
+        const s = k * 1000 + i * 7 + pass * 311;
+        const ang = rand(s) * Math.PI * 2;
+        const rr = Math.sqrt(rand(s + 1)) * 0.36;
+        const x = ox + cell / 2 + Math.cos(ang) * rr * cell * 1.1;
+        const y = oy + cell / 2 + Math.sin(ang) * rr * cell * 0.42 - (pass ? cell * 0.035 : -cell * 0.02);
+        const r = cell * (0.07 + rand(s + 2) * 0.12) * (1 - rr * 0.9);
+        const grd = g.createRadialGradient(x, y, 0, x, y, r);
+        const tone = pass ? 255 : 212;
+        const a = pass ? 0.55 : 0.35;
+        grd.addColorStop(0, `rgba(${tone},${tone},${tone + (pass ? 0 : 8)},${a})`);
+        grd.addColorStop(0.55, `rgba(${tone},${tone},${tone},${a * 0.45})`);
+        grd.addColorStop(1, `rgba(${tone},${tone},${tone},0)`);
+        g.fillStyle = grd;
+        g.beginPath();
+        g.arc(x, y, r, 0, Math.PI * 2);
+        g.fill();
+      }
+    }
+    // uv rect (three.js uv origin is bottom-left)
+    rects.push([ox / size, 1 - (oy + cell) / size, cell / size, cell / size]);
+  }
+  return { texture: finish(c), rects };
+}
+
+/** Rose-petal sprite. */
+export function makePetalTexture(color = "#ff9fc4") {
+  const [c, g] = canvas(128, 128);
+  const grd = g.createLinearGradient(20, 20, 108, 108);
+  grd.addColorStop(0, "#ffffff");
+  grd.addColorStop(0.35, color);
+  grd.addColorStop(1, "#d9477f");
+  g.fillStyle = grd;
+  g.beginPath();
+  g.moveTo(64, 8);
+  g.bezierCurveTo(120, 30, 118, 96, 64, 120);
+  g.bezierCurveTo(10, 96, 8, 30, 64, 8);
+  g.fill();
+  return finish(c);
+}
+
+/** Soft round glow sprite (sparks, stars, dust). */
+export function makeDotTexture() {
+  const [c, g] = canvas(64, 64);
+  const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grd.addColorStop(0, "rgba(255,255,255,1)");
+  grd.addColorStop(0.25, "rgba(255,255,255,0.6)");
+  grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 64, 64);
+  return finish(c);
+}
+
+/** Vertical light-beam gradient (for "curtain of light" backdrops). */
+export function makeBeamTexture() {
+  const [c, g] = canvas(64, 256);
+  const grd = g.createLinearGradient(0, 0, 64, 0);
+  grd.addColorStop(0, "rgba(255,255,255,0)");
+  grd.addColorStop(0.5, "rgba(255,255,255,1)");
+  grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 64, 256);
+  const v = g.createLinearGradient(0, 0, 0, 256);
+  v.addColorStop(0, "rgba(0,0,0,0)");
+  v.addColorStop(0.3, "rgba(0,0,0,1)");
+  v.addColorStop(1, "rgba(0,0,0,0)");
+  g.globalCompositeOperation = "destination-in";
+  g.fillStyle = v;
+  g.fillRect(0, 0, 64, 256);
+  return finish(c);
+}
+
+/** Text on a transparent canvas, using a CSS font family (e.g. a next/font variable). */
+export function makeTextTexture(
+  lines: { text: string; size: number; family: string; italic?: boolean }[],
+  opts: { width?: number; height?: number; color?: string; align?: CanvasTextAlign } = {},
+) {
+  const w = opts.width ?? 1024;
+  const h = opts.height ?? 512;
+  const [c, g] = canvas(w, h);
+  g.fillStyle = opts.color ?? "#ffffff";
+  g.textAlign = opts.align ?? "center";
+  g.textBaseline = "middle";
+  const total = lines.reduce((s, l) => s + l.size * 1.1, 0);
+  let y = h / 2 - total / 2;
+  for (const l of lines) {
+    y += l.size * 0.55;
+    g.font = `${l.italic ? "italic " : ""}${l.size}px ${l.family}`;
+    g.fillText(l.text, opts.align === "left" ? 40 : w / 2, y);
+    y += l.size * 0.55;
+  }
+  return finish(c);
+}

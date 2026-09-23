@@ -24,20 +24,25 @@ Claude Code uchun skill: **Awwwards darajasidagi hikoyali (storytelling) 3D veb-
 | 2026-09-23 | **Zero to'liq videoga yozildi** (headless Chrome + puppeteer, haqiqiy GPU): `research/zero-university/video/zero-960.mp4` (348 s) + `marks.json`; 228 skrinshot (`frames/shots/`), kadr jadvallari (`frames/sheets/`: umumiy + 4 ta asosiy o'tish kadrma-kadr). Yozuvchi skript → `tools/site-recorder/` |
 | 2026-09-23 | Yangi detallar tahlilga qo'shildi: qo'l → gips haykal → Franklin (bitiruvchi shapkada); 1-hold o'tishi haqiqiy sichqoncha bilan ~1.2 s da boshlanadi |
 
-## 📍 Hozirgi holat
-Tadqiqot bosqichi **tugadi**. Skill yozish **hali boshlanmagan**.
+| 2026-09-23 | Qaror: skill nomi **`story-3d-site`**, stek **Next.js 16 + R3F 9 + drei 10 + postprocessing + GSAP + Lenis + zustand** (foydalanuvchi: "nima texnologiya kerak bo'lsa foydalanaver") |
+| 2026-09-23 | **Shablon yozildi**: `skill/story-3d-site/template/` — 7 bobli demo hikoya, scroll dvigateli (Lenis), gate/TAP HOLD tizimi, 4 ta kinematik o'tish, color-grade postFX, effektlar kutubxonasi (bulutlar, zarrachalar, halqalar, ekran sinishi, shisha, yonish, nur ustunlari, shahar), HUD (progress, XP, boblar navigatsiyasi, CTA, motion toggle, hotspot kartochka), loader |
+| 2026-09-23 | Foydalanuvchi sinovi bo'yicha tuzatishlar: (1) gate'da cheksiz rekursiya (Maximum call stack) → re-entry guard; (2) scroll bilan gate'ni aylanib o'tish → barcha tugallanmagan gate'lar bo'yicha "qattiq devor"; (3) TAP HOLD ko'rinmas edi (oq fonda oq) → qorong'i shisha disk, progress halqa, ripple, "Press & hold / Space" ishorasi, fon xiralashadi; (4) **oq juda ko'p, ko'zni og'ritadi** → och boblar o'rta tonlarga, bloom threshold 0.85, oq chaqnashlar o'rniga yumshoq yalpiz rang, bulutlar kulrangroq. Test: headless Chrome (`gate-test.js`) — gate'ni o'tib bo'lmaydi, hold ishlaydi, xatolar yo'q |
 
-Foydalanuvchi bilan kelishilgan: skill-creator jarayoni (qoralama → test promptlar → skill bilan/skillsiz solishtirish → foydalanuvchi bahosi → yaxshilash). Vaqt taxmini: birinchi versiya ≈ 2.5–3.5 soat, to'liq ≈ 5–7 soat.
+## 📍 Hozirgi holat
+Shablon (dvigatel) ishlaydi va foydalanuvchi sinovidan o'tmoqda. Foydalanuvchi fikri: "qolganlari oddiy elementlar bilan — yaxshi" (placeholder sahnalar hozircha qabul qilindi). Eslatma foydalanuvchidan: **oq/yorqin joylarni ko'paytirmang — ko'zni charchatadi**; TAP HOLD aniq ko'rinishi va aylanib o'tib bo'lmasligi kerak.
+
+Ishga tushirish: `cd skill/story-3d-site/template && npm install && npx next dev --port 3100`
+(Fedora'da npm ENETUNREACH bersa: `NODE_OPTIONS=--dns-result-order=ipv4first npm install`)
 
 ## ⏭️ Keyingi qadamlar
-1. [x] Muhim kadrlarni rasm sifatida saqlash → `research/zero-university/frames/` (qarang: `frames/README.md`).
-2. [ ] Foydalanuvchidan yakuniy tasdiq: skill nomi (`story-3d-site`?), stek (Next.js + R3F — standart), sinov mavzulari.
-3. [ ] Hujjatlarni tekshirish: Three.js, R3F, drei, GSAP, Lenis, postprocessing — joriy versiyalar/API.
-4. [ ] `skill/template/` — Next.js + R3F + GSAP + Lenis + postprocessing, stage tizimi; brauzerda ishlashini tekshirish.
-5. [ ] Effektlar: bulutlar, parallaks, glitch, color grade o'tishi, singan shisha, burn, siqilish-portlash, TAP HOLD (yaxshilangan), XP, hotspot.
-6. [ ] `SKILL.md` + `references/*.md`.
-7. [ ] Test promptlar bilan sinov, foydalanuvchi bahosi, iteratsiya.
-8. [ ] `~/.claude/skills/` ga o'rnatish (Fedora va Windows).
+1. [x] Muhim kadrlarni rasm sifatida saqlash.
+2. [x] Skill nomi (`story-3d-site`) va stek (Next.js + R3F) tasdiqlandi.
+3. [x] `skill/story-3d-site/template/` — ishlaydigan shablon.
+4. [ ] Foydalanuvchi shablonni sinab bo'lishini kutish / qo'shimcha tuzatishlar.
+5. [ ] To'liq walkthrough testi (`tools/` ga `walkthrough.js` + `gate-test.js` ko'chirish) — skill ichida vizual QA uchun.
+6. [ ] `SKILL.md` (ish tartibi: brif → ssenariy → shablondan loyiha → sahnalar → sayqal) + `references/*.md` (storytelling, transitions, effects, interactions, design-system, performance, accessibility).
+7. [ ] Test promptlar bilan sinov (skill bilan/skillsiz), foydalanuvchi bahosi, iteratsiya.
+8. [ ] `~/.claude/skills/story-3d-site/` ga o'rnatish (Fedora va Windows).
 
 ## 🗒️ Qarorlar va eslatmalar
 - Zero'ning kamchiliklarini skillda tuzatamiz: qisqa loader, aniq TAP HOLD progressi, boblar navigatsiyasi, HTML matn (SEO/a11y), reduced-motion, statistikaga manba.
