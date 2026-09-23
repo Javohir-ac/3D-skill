@@ -29,16 +29,21 @@ export const story: StoryConfig = {
       background: "#a9c9bc",
       backdrop: { top: "#c3dcd1", bottom: "#7fa999", accent: "#e4fff3", flow: 0.55, rays: 0.25 },
       grade: { exposure: 0.94, saturation: 1.0, contrast: 1.02, tint: "#bff5dc", tintAmount: 0.06, bloom: 0.55, vignette: 0.35, grain: 0.05, dof: 0.25, dirt: 0.5 },
-      boundary: "drain",
+      // ONE continuous shot into chapter 2: the orb ("Time") rises, the camera
+      // tilts up after it and flies through the first clouds — the brief grey dip
+      // at the boundary is simply the inside of a cloud.
+      boundary: "#c3d3d8",
       hero: [
         { at: 0, pos: [0, 0, 0], scale: 0.55, noise: 0.35, color: MINT, accent: MINT_LIGHT, glow: 0.1, spin: 0.25 },
         { at: 0.5, pos: [0, 0.1, 0], scale: 0.9, noise: 0.28, glow: 0.2 },
-        { at: 1, pos: [-0.9, 0.3, 0], scale: 0.7, noise: 0.18, glow: 0.35 },
+        { at: 0.75, pos: [0, 0.5, 0], scale: 0.8, noise: 0.22, glow: 0.3 },
+        { at: 1, pos: [0, 1.2, -0.5], scale: 0.7, noise: 0.18, glow: 0.4 },
       ],
       camera: [
         { at: 0, pos: [0, 0, 8.5], look: [0, 0, 0], fov: 32 },
         { at: 0.5, pos: [0.6, 0.2, 6], look: [0, 0.05, 0] },
-        { at: 1, pos: [-0.4, 0.4, 5.2], look: [-0.6, 0.25, 0], fov: 36 },
+        { at: 0.75, pos: [0.2, -0.2, 5.6], look: [0, 0.5, 0], fov: 36 },
+        { at: 1, pos: [0, -0.4, 4.8], look: [0, 1.3, -0.5], fov: 40 },
       ],
       beats: [
         { at: 0.18, fx: "pulse" },
@@ -62,12 +67,14 @@ export const story: StoryConfig = {
       grade: { exposure: 0.92, saturation: 0.95, contrast: 1.02, tint: "#ffe3ee", tintAmount: 0.05, bloom: 0.45, vignette: 0.35, grain: 0.05, dof: 0.5, dirt: 0.6 },
       gate: { type: "hold", at: 0.9, label: "Hold", transition: "breakToDark", xp: 100 },
       hero: [
-        { at: 0, pos: [-0.9, 0.3, 0], scale: 0.7, noise: 0.18, glow: 0.35, color: MINT, accent: MINT_LIGHT },
+        { at: 0, pos: [0, 1.2, -0.5], scale: 0.7, noise: 0.18, glow: 0.4, color: MINT, accent: MINT_LIGHT },
+        { at: 0.2, pos: [-0.9, 0.3, 0], scale: 0.6, noise: 0.16, glow: 0.5 },
         { at: 0.5, pos: [-0.8, 0.15, 0.3], scale: 0.42, noise: 0.12, glow: 0.8, glass: 0.25 },
         { at: 0.9, pos: [-0.25, 0, 0.6], scale: 0.3, noise: 0.08, glow: 1.3, glass: 0.4 },
       ],
       camera: [
-        { at: 0, pos: [-0.4, 0.4, 5.2], look: [-0.6, 0.25, 0], fov: 36 },
+        { at: 0, pos: [0, -0.4, 4.8], look: [0, 1.3, -0.5], fov: 40 },
+        { at: 0.2, pos: [-0.4, 0.4, 5.2], look: [-0.6, 0.25, 0], fov: 36 },
         { at: 0.45, pos: [0.5, -0.2, 4.6], look: [0, 0.1, 0] },
         { at: 0.9, pos: [0.1, 0, 3.4], look: [0, 0, 0.5], fov: 30 },
       ],
@@ -78,7 +85,7 @@ export const story: StoryConfig = {
         { at: 0.8, fx: "pulse" },
       ],
       lines: [
-        { text: "for the *T*rip", style: "serif", size: "xl", at: [0.03, 0.26], anchor: "tl", tag: "h2" },
+        { text: "*T*ime for the trip", style: "serif", size: "xl", at: [0.03, 0.26], anchor: "tl", tag: "h2" },
         { text: "the *B*ook", style: "serif", size: "xl", at: [0.24, 0.46], anchor: "br" },
         { text: "the *P*eople", style: "serif", size: "xl", at: [0.44, 0.64], anchor: "tr" },
         { text: "the *L*ife", style: "serif", size: "xxl", at: [0.64, 0.88], anchor: "center" },
