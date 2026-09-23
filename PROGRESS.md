@@ -21,6 +21,8 @@ Claude Code uchun skill: **Awwwards darajasidagi hikoyali (storytelling) 3D veb-
 | 2026-09-23 | Tahlil usuli hujjatlashtirildi → `research/analysis-method.md` |
 | 2026-09-23 | Skill rejasi → `skill/PLAN.md` |
 | 2026-09-23 | GitHub repo ulandi, birinchi push |
+| 2026-09-23 | **Zero to'liq videoga yozildi** (headless Chrome + puppeteer, haqiqiy GPU): `research/zero-university/video/zero-960.mp4` (348 s) + `marks.json`; 228 skrinshot (`frames/shots/`), kadr jadvallari (`frames/sheets/`: umumiy + 4 ta asosiy o'tish kadrma-kadr). Yozuvchi skript → `tools/site-recorder/` |
+| 2026-09-23 | Yangi detallar tahlilga qo'shildi: qo'l → gips haykal → Franklin (bitiruvchi shapkada); 1-hold o'tishi haqiqiy sichqoncha bilan ~1.2 s da boshlanadi |
 
 ## 📍 Hozirgi holat
 Tadqiqot bosqichi **tugadi**. Skill yozish **hali boshlanmagan**.
@@ -28,7 +30,7 @@ Tadqiqot bosqichi **tugadi**. Skill yozish **hali boshlanmagan**.
 Foydalanuvchi bilan kelishilgan: skill-creator jarayoni (qoralama → test promptlar → skill bilan/skillsiz solishtirish → foydalanuvchi bahosi → yaxshilash). Vaqt taxmini: birinchi versiya ≈ 2.5–3.5 soat, to'liq ≈ 5–7 soat.
 
 ## ⏭️ Keyingi qadamlar
-1. [ ] **Muhim kadrlarni rasm sifatida saqlash** → `research/zero-university/frames/` (o'rta barmoq ~1.6–2.0 s, zulmatni sindirish ~4.0–4.6 s, qo'l→dollar ~63–66 s, siqilish-portlash ~131–135 s, bulutlar, final shahar). Tahlil vaqtidagi skrinshotlar faylga saqlanmagan edi.
+1. [x] Muhim kadrlarni rasm sifatida saqlash → `research/zero-university/frames/` (qarang: `frames/README.md`).
 2. [ ] Foydalanuvchidan yakuniy tasdiq: skill nomi (`story-3d-site`?), stek (Next.js + R3F — standart), sinov mavzulari.
 3. [ ] Hujjatlarni tekshirish: Three.js, R3F, drei, GSAP, Lenis, postprocessing — joriy versiyalar/API.
 4. [ ] `skill/template/` — Next.js + R3F + GSAP + Lenis + postprocessing, stage tizimi; brauzerda ishlashini tekshirish.

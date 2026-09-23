@@ -78,6 +78,8 @@ Kadrma-kadr (bosish tugagan paytdan boshlab):
 | 6.8 s | "That's" (kichik script) + "**Bullsh\*t**" (katta serif, oq, glow) paydo bo'ladi, fonda **film donachasi (grain)** |
 | 7.0 s+ | Yakuniy holat, XP 200 ga oshadi |
 
+**2-yozuvdan (haqiqiy sichqoncha bilan) aniqlik:** o'tish bosilgandan ~1.2 s keyin boshlanadi (`frames/sheets/hold1-transition_*.jpg`): 21.07 s yashil qo'l burila boshlaydi → 21.27 s o'rta barmoq → 21.67–22.07 s qizil cho'kish → 22.27–23.27 s deyarli to'liq qora → 23.47 s qora fondan qo'l chiqadi (qizil parchalar) → 23.67–24.07 s zulmat qora parchalarga bo'linib uchadi, qizil sahna ochiladi → 24.27 s "But.".
+
 **G'oya:** "Universitet senga ish beradi" degan va'da — xudoning qo'lidek — oxirgi soniyada o'rta barmoq ko'rsatadi. Kulgili + shok + g'azab.
 
 ## 5. Dalillar — qizil statistika
@@ -104,6 +106,13 @@ Kadrma-kadr (bosish tugagan paytdan boshlab):
 | 66.4+ | Banknotalar uchadi, chetlari **yonadi** (oltin olov, zarrachalar), "University **sells**" |
 
 **G'oya:** "Sen universitet uchun shunchaki pulsan". Qo'l = inson → banknota portreti.
+
+**2-yozuvdan qo'shimcha detallar** (`frames/sheets/hand-to-dollar_*.jpg`, 54–60 s, tezroq scroll):
+- 56.3 s: qo'l avval **oq gips haykalga** aylanadi (tirik teri → jonsiz haykal), qizil fon hali saqlanadi.
+- 57.3–58.1 s: qizil fon **desaturatsiya** bo'ladi, kuchli **film grain** paydo bo'ladi, haykal-qo'l xira.
+- 58.4 s: **hard cut** — Franklin portreti, boshida **bitiruvchi shapkasi (mortarboard)** — diplom/universitet ishorasi.
+- 58.6–59.9 s: kamera orqaga, bir nechta banknotalar, "University sells".
+- Scroll tezligiga qarab "qo'l ovalda" oraliq kadri ko'rinmasligi mumkin (1-yozuvda sekin scroll bilan ko'ringan).
 
 ## 7. Pul — "University sells … Paper"
 - To'q yashil fon, orqada **bo'r doskasi** (formulalar, chizmalar) — universitet.

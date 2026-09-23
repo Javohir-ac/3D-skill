@@ -1,0 +1,42 @@
+[
+  {
+    "t": 0,
+    "label": "recording started (intro: DRAW A ZERO)"
+  },
+  {
+    "t": 1.52,
+    "label": "zero drawn"
+  },
+  {
+    "t": 19.83,
+    "label": "TAP HOLD #1 visible"
+  },
+  {
+    "t": 20.05,
+    "label": "hold #1 pressed"
+  },
+  {
+    "t": 34.54,
+    "label": "hold #1 released"
+  },
+  {
+    "t": 82.35,
+    "label": "TAP HOLD #2 visible"
+  },
+  {
+    "t": 82.44,
+    "label": "hold #2 pressed"
+  },
+  {
+    "t": 96.69,
+    "label": "hold #2 released"
+  },
+  {
+    "t": 343.2,
+    "label": "final reached"
+  },
+  {
+    "t": 355.92,
+    "label": "video saved (157.7 MB)"
+  }
+]
