@@ -71,8 +71,8 @@ export default function EvidenceScene(props: SceneProps) {
           </mesh>
         </group>
       ))}
-      <group position={[0, 0, -1.5]} rotation={[0, 0, -0.06]}>
-        <BurnPlane burn={() => range(p(), 0.62, 0.95)} map={calendar} size={[1.5, 1.875]} />
+      <group position={[0, 0, -1.5]} rotation={[0.12, -0.4, -0.06]}>
+        <BurnPlane burn={() => range(p(), 0.62, 0.95)} curl={() => 0.55 + range(p(), 0.45, 0.9) * 0.45} map={calendar} size={[1.5, 1.875]} />
       </group>
       <Particles kind="dot" count={90} color="#ffa04a" area={[8, 6, 4]} lift={0.5} sway={0.2} opacity={() => range(p(), 0.6, 0.75)} seed={9} />
     </group>
