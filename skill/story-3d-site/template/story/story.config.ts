@@ -5,14 +5,14 @@ import type { StoryConfig } from "./types";
 // Arc: origin → harvest → (gate) roast → evidence → why → (gate) reveal → finale.
 // One HERO object lives through every chapter and changes form — here it is the
 // COFFEE BEAN itself (heroShape: 1), so every chapter is a step of its life:
-//   raw green bean ripening in the mountains → picked by hand in the clouds →
+//   a coffee bean ripening in the mountains → picked by hand in the clouds →
 //   cracks in the fire ("first crack") → shelf-stale coffee burns away (evidence)
 //   → a tiny glowing core (why) → bursts into light (gate) → roasted bean over the city.
 // Something happens every ~10–15% of each chapter: a line, a beat, a camera move.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const MINT_LIGHT = "#9dffd0";
-const GREEN_BEAN = "#6fbf92"; // raw coffee really is pale green
+const BEAN = "#7a4a28"; // coffee brown — the bean people recognise instantly
+const CREMA = "#ffcf9a"; // warm rim / halo light
 const ROAST = "#3b1d0e";
 const ROASTED = "#6a3a1b";
 const EMBER = "#ff7a2f";
@@ -60,7 +60,7 @@ export const story: StoryConfig = {
       // at the boundary is simply the inside of a cloud.
       boundary: "#c3d3d8",
       hero: [
-        { at: 0, pos: [0, 0, 0], scale: 0.55, noise: 0.35, color: GREEN_BEAN, accent: MINT_LIGHT, glow: 0.1, spin: 0.25 },
+        { at: 0, pos: [0, 0, 0], scale: 0.55, noise: 0.35, color: BEAN, accent: CREMA, glow: 0.1, spin: 0.25 },
         { at: 0.5, pos: [0, 0.1, 0], scale: 0.9, noise: 0.28, glow: 0.2 },
         { at: 0.75, pos: [0, 0.5, 0], scale: 0.8, noise: 0.22, glow: 0.3 },
         { at: 1, pos: [0, 1.2, -0.5], scale: 0.7, noise: 0.18, glow: 0.4 },
@@ -93,7 +93,7 @@ export const story: StoryConfig = {
       grade: { exposure: 0.92, saturation: 0.95, contrast: 1.02, tint: "#ffe3ee", tintAmount: 0.05, bloom: 0.45, vignette: 0.35, grain: 0.05, dof: 0.5, dirt: 0.6 },
       gate: { type: "hold", at: 0.9, label: "Bosib tur", transition: "breakToDark", xp: 100 },
       hero: [
-        { at: 0, pos: [0, 1.2, -0.5], scale: 0.7, noise: 0.18, glow: 0.4, color: GREEN_BEAN, accent: MINT_LIGHT },
+        { at: 0, pos: [0, 1.2, -0.5], scale: 0.7, noise: 0.18, glow: 0.4, color: BEAN, accent: CREMA },
         { at: 0.2, pos: [-0.9, 0.3, 0], scale: 0.6, noise: 0.16, glow: 0.5 },
         { at: 0.5, pos: [-0.8, 0.15, 0.3], scale: 0.42, noise: 0.12, glow: 0.6, glass: 0.1 },
         { at: 0.9, pos: [-0.25, 0, 0.6], scale: 0.3, noise: 0.08, glow: 0.9, glass: 0.15 },
