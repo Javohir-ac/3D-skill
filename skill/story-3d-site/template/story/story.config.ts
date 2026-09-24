@@ -214,9 +214,10 @@ export const story: StoryConfig = {
       title: "Explore",
       length: 1.4,
       scene: "finale",
-      background: "#0d1512",
-      backdrop: { top: "#16261f", bottom: "#050907", accent: "#39ff9f", flow: 0.3, stars: 0.5 },
-      grade: { exposure: 1.0, saturation: 1.05, contrast: 1.0, tint: "#9dffd0", tintAmount: 0.05, bloom: 0.9, vignette: 0.35, grain: 0.05, dof: 0.3, dirt: 0.4 },
+      // daylight, continuing the reveal's sky — soft mid-tones, not glaring white
+      background: "#a9bfbb",
+      backdrop: { top: "#bccfcc", bottom: "#8fa8a3", accent: "#e6fff4", flow: 0.25, rays: 0.3 },
+      grade: { exposure: 0.95, saturation: 1.0, contrast: 1.03, tint: "#dff5ec", tintAmount: 0.04, bloom: 0.35, vignette: 0.3, grain: 0.04, dof: 0.25, dirt: 0.3 },
       hero: [{ at: 0, pos: [0, 0.9, 0], scale: 0.28, noise: 0.15, crack: 0, glow: 1.2, glass: 0.55, color: MINT, accent: MINT_LIGHT, spin: 0.4 }],
       camera: [
         { at: 0, pos: [0, 1.4, 9.5], look: [0, -0.6, -1.5], fov: 38 },

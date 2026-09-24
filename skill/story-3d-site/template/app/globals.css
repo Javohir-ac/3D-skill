@@ -95,8 +95,8 @@ a { color: inherit; }
 }
 
 /* colour of copy per chapter mood (light chapters get dark ink) */
-[data-chapter="0"] .copy, [data-chapter="1"] .copy, [data-chapter="5"] .copy { color: #173d33; text-shadow: none; }
-[data-chapter="0"] .source, [data-chapter="1"] .source, [data-chapter="5"] .source { color: #3d6a5d; }
+[data-chapter="0"] .copy, [data-chapter="1"] .copy, [data-chapter="5"] .copy, [data-chapter="6"] .copy { color: #173d33; text-shadow: none; }
+[data-chapter="0"] .source, [data-chapter="1"] .source, [data-chapter="5"] .source, [data-chapter="6"] .source { color: #3d6a5d; }
 
 /* ───────────────── HUD ───────────────── */
 .ruler {

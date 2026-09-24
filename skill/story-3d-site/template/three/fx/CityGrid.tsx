@@ -66,7 +66,7 @@ function buildingMaterial(lit: { value: number }) {
         `#include <emissivemap_fragment>
          {
            float glass = step(0.5, vWin.x);
-           float on = glass * step(vWin.y, uLit);
+           float on = glass * step(vWin.y, uLit) * step(0.001, uLit);
            diffuseColor.rgb *= 1.0 - glass * 0.55;              // dark glass when off
            vec3 warm = vec3(1.0, 0.76, 0.44), mint = vec3(0.55, 1.0, 0.78);
            totalEmissiveRadiance += mix(warm, mint, step(0.8, fract(vWin.y * 7.13))) * on * 1.5;
