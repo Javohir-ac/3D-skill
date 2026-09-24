@@ -26,11 +26,11 @@ export default function FinaleScene(props: SceneProps) {
       <hemisphereLight args={["#bfe9da", "#1a2e27", 0.9]} />
       <directionalLight position={[5, 10, 4]} intensity={1.4} color="#d6f5ea" />
       <PresentationControls global snap polar={[-0.2, 0.3]} azimuth={[-0.6, 0.6]} speed={1.2}>
-        <group position={[0, -1.1, -1.5]} rotation={[0.55, 0.3, 0]} scale={0.8}>
+        <group position={[0, -1.45, -1.2]} rotation={[0.3, 0.55, 0]} scale={0.95}>
           <Suspense fallback={null}>
             <CityGrid base="#3d514a" lit={() => 0.1 + range(p(), 0.05, 0.9) * 0.5} />
           </Suspense>
-          <group position={[0, 0.6, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.7}>
+          <group position={[0, 2.2, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.45}>
             <SegmentedRings color="#39ff9f" core={false} />
           </group>
           {onScreen && story.hotspots.map((h) => (
