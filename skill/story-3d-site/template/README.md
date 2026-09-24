@@ -1,6 +1,6 @@
 # story-3d-site — template
 
-Scroll-driven, cinematic storytelling site (Next.js 16 · React Three Fiber 9 · drei · postprocessing · GSAP · Lenis · zustand). Works with **zero binary assets** — everything visual is procedural until real art arrives.
+Scroll-driven, cinematic storytelling site (Next.js 16 · React Three Fiber 9 · drei · postprocessing · GSAP · Lenis · zustand). Works with almost no binary assets (a few meshopt GLBs made by the skill's Blender scripts: hands, hourglass, city kit). Demo story: **"Tong"**, a coffee brand, Uzbek copy — replace it with the brief.
 
 ```bash
 npm install          # Fedora: NODE_OPTIONS=--dns-result-order=ipv4first npm install
@@ -39,7 +39,7 @@ three/               Experience (Canvas), Backdrop, CameraDirector, CameraRig (p
 - **Scenes** get `useChapter(props, onFrame)` → root group auto-hidden when off-screen + `p()` progress.
 
 ## Effects library (`three/fx`)
-`CloudField` (instanced sprite clouds with dive) · `Particles` (petals/dust/embers) · `OrbitRings` · `SegmentedRings` (charge device) · `GlassShard` (transmission) · `BurnPlane` (dissolve with embers) · `ScreenShatter` · `ScreenBurn` · `LightBeams` · `CityGrid` · procedural `textures.ts` (clouds, petals, dots, beams, calendar, stat cards, text).
+`CloudField` · `Particles` · `OrbitRings` · `SegmentedRings` · `GlassShard` (reflective body + glinting edges) · `BurnPlane` (curling, burning paper) · `HandModel` (sculpted hands) · `Hourglass` · `CityGrid` (maquette city, windows light up) · `ScreenShatter` · `ScreenBurn` · `FrostPane` · `LightBeams` · procedural `textures.ts`. Full reference: `../references/scenes-and-effects.md`.
 
 ## QA
-`tools/site-recorder/walkthrough.js <url> <outDir> [w] [h]` — headless Chrome drives the whole story (solves the intro, holds gates, opens a hotspot) and screenshots every step; `gate-test.js` hammers gates with fast scrolling. Run both at 1440×810 and 390×844 before shipping.
+`../scripts/qa/walkthrough.js <url> <outDir> [w] [h]` — headless Chrome drives the whole story (solves the intro, holds gates, opens a hotspot) and screenshots every step; `gate-test.js` hammers gates with fast scrolling. Run both at 1440×810 and 390×844 before shipping.

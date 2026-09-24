@@ -1,0 +1,6 @@
+{
+  "name": "story-3d-site-qa",
+  "private": true,
+  "description": "Headless-Chrome QA for story-3d-site builds (npm install here once).",
+  "dependencies": { "puppeteer-core": "^24.0.0" }
+}

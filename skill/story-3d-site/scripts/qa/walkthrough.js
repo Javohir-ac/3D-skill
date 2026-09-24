@@ -1,0 +1,125 @@
+// Automated visual QA for a story-3d-site build.
+// Usage: node walkthrough.js <url> <outDir> [width] [height]
+const puppeteer = require('puppeteer-core');
+const fs = require('fs');
+const path = require('path');
+
+const [url = 'http://localhost:3100', outDir = './qa', W = '1440', H = '810'] = process.argv.slice(2);
+const OUT = path.resolve(outDir);
+fs.mkdirSync(OUT, { recursive: true });
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Solve an optional "draw a circle" intro with real mouse input.
+async function solveIntro(page, W, H, shot) {
+  // notification-wall intro: swipe across the screen until it clears
+  if (await page.$('.nwall')) {
+    await new Promise((res) => setTimeout(res, 900));
+    if (shot) await shot('intro-wall');
+    for (let pass = 0; pass < 24 && (await page.$(".nwall")); pass++) {
+      const y = H * (0.06 + (pass % 12) * 0.075);
+      const [x0, x1] = pass % 2 ? [W * 0.95, W * 0.05] : [W * 0.05, W * 0.95];
+      await page.mouse.move(x0, y);
+      await page.mouse.down();
+      for (let i = 1; i <= 24; i++) { await page.mouse.move(x0 + ((x1 - x0) * i) / 24, y + Math.sin(i / 3) * 40); await new Promise((res) => setTimeout(res, 10)); }
+      await page.mouse.up();
+      if (shot && pass === 2) await shot('intro-swiping');
+      await new Promise((res) => setTimeout(res, 120));
+    }
+    await page.waitForFunction(() => !document.querySelector('.nwall'), { timeout: 8000 });
+    return true;
+  }
+  const drawSel = (await page.$('.frost-intro')) ? '.frost-intro' : (await page.$('.intro')) ? '.intro' : null;
+  if (!drawSel) return false;
+  await new Promise((res) => setTimeout(res, 1200)); // let the intro mount its listeners
+  if (shot) await shot('intro');
+  const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.2;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.mouse.move(cx + r, cy);
+    await page.mouse.down();
+    for (let i = 0; i <= 60; i++) {
+      const a = (i / 60) * Math.PI * 2.05;
+      await page.mouse.move(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+      await new Promise((res) => setTimeout(res, 12));
+    }
+    await page.mouse.up();
+    const closed = await page.waitForFunction((sel) => !document.querySelector(sel), { timeout: 4000 }, drawSel).then(() => true, () => false);
+    if (closed) return true;
+  }
+  throw new Error('intro circle was not recognised after 3 attempts');
+}
+
+
+(async () => {
+  const browser = await puppeteer.launch({
+    executablePath: process.env.CHROME || '/usr/bin/google-chrome',
+    headless: true,
+    defaultViewport: { width: +W, height: +H, isMobile: +W < 700, hasTouch: +W < 700 },
+    args: ['--ignore-gpu-blocklist', '--enable-gpu'],
+  });
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`[${m.type()}] ${m.text()}`); });
+  page.on('pageerror', (e) => errors.push(`[pageerror] ${e.message}`));
+
+  let n = 0;
+  const shot = async (label) => {
+    const name = `${String(n++).padStart(3, '0')}_${label}.jpg`;
+    await page.screenshot({ path: path.join(OUT, name), type: 'jpeg', quality: 72 });
+    return name;
+  };
+  const t0 = Date.now();
+  const log = (s) => console.log(`[${((Date.now() - t0) / 1000).toFixed(1)}s] ${s}`);
+
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  await shot('loader');
+  await page.waitForSelector('.loader.is-gone', { timeout: 60000 });
+  log(`loader gone after ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  await sleep(800);
+  if (await solveIntro(page, +W, +H, shot)) log('intro solved (circle drawn)');
+  await sleep(600);
+  await shot('start');
+
+  const cx = +W / 2, cy = +H / 2;
+  let gates = 0;
+  for (let step = 0; step < 700; step++) {
+    await page.mouse.move(cx + 120, cy + 80);
+    await page.mouse.wheel({ deltaY: 110 });
+    await sleep(140);
+    if (step % 5 === 0) {
+      const title = await page.$eval('.ruler-label', (e) => e.textContent).catch(() => '?');
+      await shot(`s${step}_${title.replace(/\W+/g, '-')}`);
+    }
+    const gate = await page.$('.gate-btn');
+    if (gate) {
+      gates++;
+      await sleep(700);
+      log(`gate #${gates} visible`);
+      await shot(`gate${gates}-visible`);
+      const box = await gate.boundingBox();
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      const until = Date.now() + 7500;
+      let released = false;
+      while (Date.now() < until) {
+        await shot(`gate${gates}-t${((Date.now() - t0) / 1000).toFixed(2)}`);
+        if (!released && !(await page.$('.gate-btn'))) { await page.mouse.up(); released = true; log(`gate #${gates} completed`); }
+        await sleep(90);
+      }
+      if (!released) await page.mouse.up();
+    }
+    const done = await page.$eval('.ruler-label', (e) => e.textContent).catch(() => '');
+    if (done === 'Explore') {
+      await sleep(2500);
+      await shot('finale');
+      const hsInfo = await page.$$eval('.hotspot', (els) => els.map((h) => { const r = h.getBoundingClientRect(); return `${h.textContent.trim()}@${Math.round(r.x)},${Math.round(r.y)} ${Math.round(r.width)}x${Math.round(r.height)}`; }));
+      log(`finale hotspots: ${hsInfo.length ? hsInfo.join(' | ') : 'NONE'}`);
+      const hs = await page.$('.hotspot');
+      // click by coordinates: ElementHandle.click() would scroll the page to 'reveal' the 3D-anchored element
+      if (hs) { const bb = await hs.boundingBox(); await page.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2); await sleep(700); await shot('finale-card'); }
+      break;
+    }
+  }
+  log(`done, ${n} shots, ${gates} gates`);
+  fs.writeFileSync(path.join(OUT, 'console.txt'), errors.join('\n') || '(no errors/warnings)');
+  console.log(errors.length ? `CONSOLE:\n${errors.slice(0, 20).join('\n')}` : 'console clean');
+  await browser.close();
+})().catch((e) => { console.error('FAILED', e); process.exit(1); });
