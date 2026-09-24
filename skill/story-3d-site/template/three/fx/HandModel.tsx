@@ -2,11 +2,15 @@
 import { useGLTF } from "@react-three/drei";
 import type { ThreeElements } from "@react-three/fiber";
 import { forwardRef, useMemo } from "react";
-import { type Group, type Mesh, MeshMatcapMaterial } from "three";
+import { type Group, type Mesh, MeshMatcapMaterial, MeshPhysicalMaterial } from "three";
 import { makeMatcapTexture } from "./textures";
 
-// Procedural hands generated with Blender (tools/models/hand.py), compressed
-// with gltf-transform (meshopt — decoder ships with three, no CDN).
+// Sculpted hands generated with Blender (tools/models/hand_sculpt.py: anatomical
+// primitives → voxel-remesh union → smooth → crisp nails), compressed with
+// gltf-transform (meshopt — decoder ships with three, no CDN).
+// Default look = "sculpt": a lit physical material (soft sheen on the rims,
+// light clearcoat) that reads like a premium plaster/porcelain sculpture and
+// reacts to the scene's lights and environment. "matcap" = flat clay look.
 // Model space: the hand points +Y, the palm faces +Z, forearm runs down -Y,
 // palm centre ≈ (0, 0.5, 0), fingertips reach y ≈ 2.
 export type HandPose = "reach" | "open" | "point" | "fist";
@@ -18,17 +22,35 @@ export interface HandProps {
   /** Matcap colours (see makeMatcapTexture). */
   tone?: { base?: string; light?: string; rim?: string; dark?: string };
   opacity?: number;
+  look?: "sculpt" | "matcap";
 }
 
 export const HandModel = forwardRef<Group, HandProps & Omit<ThreeElements["group"], "ref">>(function HandModel(
-  { pose, tone, opacity = 1, ...group },
+  { pose, tone, opacity = 1, look = "sculpt", ...group },
   ref,
 ) {
   const gltf = useGLTF(url(pose), false, true);
   const material = useMemo(
-    () => new MeshMatcapMaterial({ matcap: makeMatcapTexture(tone), transparent: opacity < 1, opacity }),
+    () =>
+      look === "matcap"
+        ? new MeshMatcapMaterial({ matcap: makeMatcapTexture(tone), transparent: opacity < 1, opacity })
+        : new MeshPhysicalMaterial({
+            color: tone?.base ?? "#d9c7b8",
+            roughness: 0.46,
+            metalness: 0,
+            sheen: 0.7,
+            sheenColor: tone?.rim ?? "#ffe9dc",
+            sheenRoughness: 0.45,
+            clearcoat: 0.18,
+            clearcoatRoughness: 0.35,
+            emissive: tone?.dark ?? "#000000",
+            emissiveIntensity: 0.12,
+            envMapIntensity: 1.1,
+            transparent: opacity < 1,
+            opacity,
+          }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tone?.base, tone?.light, tone?.rim, tone?.dark, opacity],
+    [look, tone?.base, tone?.light, tone?.rim, tone?.dark, opacity],
   );
   // Clone the whole node tree: meshopt quantization stores the real scale /
   // offset in the NODE transform, so taking only the geometry would shrink and
@@ -49,8 +71,8 @@ export const HandModel = forwardRef<Group, HandProps & Omit<ThreeElements["group
   );
 });
 
-/** Warm skin-like matcap for the human hand. */
-export const SKIN = { base: "#e9bca2", light: "#fff4ec", rim: "#ffe3d2", dark: "#8a5a45" };
+/** Warm porcelain / plaster skin for the human hand. */
+export const SKIN = { base: "#dcbca8", light: "#fff4ec", rim: "#ffe3d2", dark: "#3a2418" };
 /** Cool mint "divine / digital" matcap (the story's accent colour). */
 export const MINT_CLAY = { base: "#4fcf98", light: "#eafff5", rim: "#b8ffe0", dark: "#0b3a2a" };
 

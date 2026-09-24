@@ -13,7 +13,7 @@ import { useChapter, type SceneProps } from "../useChapter";
 // story.config hero keys). Shards of what it was orbit it and drift outwards.
 // The same human hand from the dream now reaches UP from the dark toward the
 // broken orb — and never gets there (the longing has turned to loss).
-const RED_SKIN = { base: "#b8574b", light: "#ffd2c6", rim: "#ff4a3a", dark: "#240304" };
+const RED_SKIN = { base: "#c9706a", light: "#ffd2c6", rim: "#ff8a78", dark: "#3a0606" };
 const HAND_SCALE = 0.8;
 const SHARDS = Array.from({ length: 7 }, (_, i) => ({ a: (i / 7) * Math.PI * 2, r: 1.5 + (i % 3) * 0.35, y: ((i % 4) - 1.5) * 0.4, seed: i + 1, s: 0.22 + (i % 3) * 0.08 }));
 
@@ -31,8 +31,8 @@ export default function FractureScene(props: SceneProps) {
       // rises from below the frame, stretches, then sinks back a little: it can't reach
       const rise = smoothstep(0.02, 0.45, p) - smoothstep(0.7, 1, p) * 0.35;
       // frame bottom ≈ y -1.6 here; fingertips (≈ +1.55 above the wrist) stop just under the orb
-      hand.current.position.set(h.x - 0.3, -3.9 + rise * 1.95 + Math.sin(t * 0.8) * 0.03, h.z + 0.4);
-      hand.current.rotation.set(-0.25, 0.25, 0.18 - rise * 0.1);
+      hand.current.position.set(h.x - 1.35, -3.7 + rise * 1.9 + Math.sin(t * 0.8) * 0.03, h.z + 0.6);
+      hand.current.rotation.set(-0.2, 0.35, -0.42 - rise * 0.08); // fingers lean toward the orb
     }
     const drift = range(p, 0.3, 1);
     SHARDS.forEach((s, i) => {
@@ -55,6 +55,8 @@ export default function FractureScene(props: SceneProps) {
         ))}
       </group>
       <pointLight position={[0, 2, 3]} intensity={40} color="#ff4040" />
+      {/* cool rim from the side so the sculpted hand separates from the red dark */}
+      <directionalLight position={[-4, 1, 2]} intensity={1.6} color="#ffd9cf" />
       <Suspense fallback={null}>
         <HandModel ref={hand} pose="open" tone={RED_SKIN} scale={HAND_SCALE} />
       </Suspense>
