@@ -102,9 +102,14 @@ screen-time numbers; a calendar of crossed-out days burns → that's *W*hy we ex
 structure → gate → the crash (red, glitch) → numbers: shipped projects, users,
 uptime → the one principle → gate → the work, as a city of projects → contact.
 
-**Ecology campaign:** a seed in dark soil → a forest in morning fog → gate → fire,
-drought → hectares lost per minute → one sprout survives → gate → a regrown city
-park → donate / volunteer hotspots.
+**Ecology campaign "Ildiz" (tested with this skill, Uzbek):** hero = an acorn.
+"Every forest starts from one *S*eed" (hourglass: a hundred years to grow) → the
+wind lifts it into the clouds, a hand reaches to catch it: "someone *P*lants it" →
+gate `burnThrough` → wildfire, the acorn cracks, ash flakes → numbers on glass;
+a "days without rain" calendar burns → "that's why we *P*lant again" (green core)
+→ gate `implodeToLight` → through the clouds onto a green city (`parks: 0.4`) →
+choose where to plant (park / school / volunteer). Intro: the circle becomes a
+tree cross-section.
 
 ## 7. Case study: why.zero.university
 

@@ -46,13 +46,18 @@ burst particles; uniforms `uNoise uCrack uGlow uGlass uShape uColor uAccent`
 come from the chapter's hero keys (damped).
 
 Silhouettes are built in the vertex shader function `surface(p)` (p = point on the
-unit sphere): `uShape` mixes the orb (`p + n * noise`) with the coffee bean
-(squashed ellipsoid, flat face, S-shaped groove). To add a new object:
+unit sphere). `uShape` walks a chain of shapes: 0 → 1 mixes the orb
+(`p + n * noise`) into the **coffee bean** (squashed ellipsoid, flat face, S groove,
+`vGroove` darkening), 1 → 2 mixes into the **acorn** (tapered nut with a point,
+small overhanging scaly cap `vCap`, stem). Shapes ≥ 1.5 count as "upright":
+`Hero.tsx` stops the tumbling spin and only sways them, so the silhouette stays
+readable. To add a new object:
 1. Write its shape as a function of `p` (e.g. seed: `p * vec3(0.6, 1.0, 0.6)` with a
    pointed tip `b.y += smoothstep(0.6, 1.0, p.y) * 0.3`; drop: taper the top;
-   coin: `p * vec3(1, 1, 0.12)` with a rim).
-2. Blend it in `surface()` (`mix(orb, myShape, uShape)`) — or add a second
-   uniform if two shapes must coexist. Normals are recomputed from `surface()`
+   coin: `p * vec3(1, 1, 0.12)` with a rim). Keep details small: a cap/feature
+   covering 40 % of the sphere reads as a different object.
+2. Append it to the chain in `surface()` (`s3 = clamp(uShape - 2.0, 0.0, 1.0)`,
+   `mix(previous, myShape, s3)`) and document its number in `types.ts`. Normals are recomputed from `surface()`
    samples, so lighting stays correct.
 3. Darken grooves via a varying (see `vGroove`).
 Cracks (`voronoiEdge`) and glass/rim work on any silhouette.
@@ -74,7 +79,7 @@ place of the mesh and keep the halo/burst; drive its material from the same
 | `LightBeams` | `color`, `count`, `spread`, `z`, `opacity()` | vertical light curtains |
 | `HandModel` | `pose: reach \| open \| point \| fist`, `tone`, `look: sculpt \| matcap`, `opacity` | Blender-sculpted hand; fingers +Y, palm +Z (rotate `[0, π, 0]` to flip the palm) |
 | `Hourglass` | `fill()`, `sand`, `wood` | GLB glass + frame; sand animated in shader |
-| `CityGrid` | `n`, `gap`, `seed`, `base`, `accent`, `lit()` | maquette city from the Blender kit; clock tower on the plaza; windows light up with `lit` |
+| `CityGrid` | `n`, `gap`, `seed`, `base`, `accent`, `lit()`, `parks` | maquette city from the Blender kit; clock tower on the plaza; windows light up with `lit`; `parks` = share of green blocks (0.16 default, 0.4 for an eco story) |
 | `ScreenShatter`, `ScreenBurn`, `FrostPane` | — | full-screen layers used by transitions / intro |
 | `textures.ts` | clouds, petal, dot, beam, matcap, calendar, stat card, text | procedural canvas textures |
 

@@ -106,8 +106,10 @@ async function solveIntro(page, W, H, shot) {
       }
       if (!released) await page.mouse.up();
     }
-    const done = await page.$eval('.ruler-label', (e) => e.textContent).catch(() => '');
-    if (done === 'Explore') {
+    // finale = hotspots are on screen, or the page can't scroll any further
+    // (language-independent: chapter titles are translated)
+    const done = await page.evaluate(() => !!document.querySelector('.hotspot') || innerHeight + scrollY >= document.documentElement.scrollHeight - 4);
+    if (done) {
       await sleep(2500);
       await shot('finale');
       const hsInfo = await page.$$eval('.hotspot', (els) => els.map((h) => { const r = h.getBoundingClientRect(); return `${h.textContent.trim()}@${Math.round(r.x)},${Math.round(r.y)} ${Math.round(r.width)}x${Math.round(r.height)}`; }));

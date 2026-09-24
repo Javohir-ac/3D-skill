@@ -76,7 +76,7 @@ Start from `story/story.config.ts` — the whole film is data. Field-by-field
 reference: `references/config.md`. Then, in order:
 1. **Copy** — `lines` per chapter (`*X*` = script swash capital, one per line),
    `brand`, `description`, `cta`, `lang`, `ui` strings, `hotspots`, `stats`.
-2. **Hero** — `heroShape` (0 orb, 1 coffee bean) + per-chapter `hero` keys
+2. **Hero** — `heroShape` (0 orb, 1 coffee bean, 2 acorn) + per-chapter `hero` keys
    (pos, scale, noise, crack, glass, glow, colours). For another object, add a
    silhouette to `three/hero/heroMaterial.ts` `surface()` (see
    `references/scenes-and-effects.md` → Hero) or swap in a GLB.
@@ -130,6 +130,10 @@ the project is a git repo.
 - Text lives in HTML (SEO, screen readers); the canvas is decoration.
   Statistics show their sources. `prefers-reduced-motion` and the Motion toggle work.
 - Keep the hero where the copy isn't: plan text anchors and hero positions together.
+- **Judge the hero from the real camera angle** (screenshot, not the shader in your
+  head): a first acorn read as "a fuzzy brown ball" because its cap was too big and
+  it tumbled, showing only the top. Objects with an "up" stay upright and sway.
+- QA scripts must not depend on the copy language (chapter titles get translated).
 - When the user dislikes a direction, keep what they liked (story logic) and
   change only the disliked part; keep rejected variants as documented alternatives.
 

@@ -94,9 +94,11 @@ Uzbek: use `o‘ g‘` (U+2018) — it is in every Latin font; `ʻ` (U+02BB) oft
 
 The frost intro asks the visitor to draw a circle; the circle then **becomes the
 topic's object** as an SVG (`components/ui/FrostIntro.tsx`, class `frost-cup`):
-cup with latte art (coffee), clock face (time), planet (space), lens (camera),
-coin (finance), plate (food), seed cross-section (ecology). Keep it line-art,
-drawn in sequence (CSS keyframes), then the glass shatters.
+cup with latte art (coffee), clock face (time), tree cross-section with growth
+rings (ecology — tested), planet (space), lens (camera), coin (finance), plate
+(food). Keep it line-art, drawn in sequence: reuse the `cupIn` (fade/scale) and
+`heartDraw` (stroke draw with `pathLength={1}`) keyframes in `globals.css` with
+staggered `animation-delay`, then the glass shatters.
 
 ## 8. Language
 

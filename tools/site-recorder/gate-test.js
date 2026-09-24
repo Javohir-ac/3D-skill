@@ -61,14 +61,19 @@ fs.mkdirSync(OUT, { recursive: true });
   await sleep(900);
   const state = () => page.evaluate(() => ({ y: Math.round(scrollY), gate: !!document.querySelector('.gate-btn'), label: document.querySelector('.ruler-label')?.textContent }));
   // average brightness of the canvas area (0..255) — detects black/white stalls
-  const brightness = () => page.evaluate(() => {
-    const c = document.querySelector('.canvas-layer canvas');
-    const t = document.createElement('canvas'); t.width = 32; t.height = 18;
-    const g = t.getContext('2d'); g.drawImage(c, 0, 0, 32, 18);
-    const d = g.getImageData(0, 0, 32, 18).data; let s = 0;
-    for (let i = 0; i < d.length; i += 4) s += (d[i] + d[i + 1] + d[i + 2]) / 3;
-    return Math.round(s / (d.length / 4));
-  });
+  // measured on a real screenshot: reading a WebGL canvas directly returns black
+  // (no preserveDrawingBuffer), which would report every frame as "stuck on black"
+  const brightness = async () => {
+    const b64 = await page.screenshot({ encoding: 'base64', type: 'jpeg', quality: 40 });
+    return page.evaluate(async (src) => {
+      const img = new Image(); img.src = 'data:image/jpeg;base64,' + src; await img.decode();
+      const t = document.createElement('canvas'); t.width = 32; t.height = 18;
+      const g = t.getContext('2d'); g.drawImage(img, 0, 0, 32, 18);
+      const d = g.getImageData(0, 0, 32, 18).data; let s = 0;
+      for (let i = 0; i < d.length; i += 4) s += (d[i] + d[i + 1] + d[i + 2]) / 3;
+      return Math.round(s / (d.length / 4));
+    }, b64);
+  };
 
   for (let gate = 1; gate <= 5; gate++) {
     // blast forward until a gate appears (or the end)

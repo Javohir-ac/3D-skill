@@ -16,7 +16,7 @@ Look at the site the way a visitor does — frame by frame — before showing it
 |---|---|
 | `chapter-shots.js <id> <out> [steps=12] [delta=160] [gates=0] [url]` | skips the intro, passes N gates, scrolls to chapter `id`, one screenshot per wheel step. Use `gates` = number of gates before that chapter. |
 | `walkthrough.js <url> <out> [w] [h]` | the whole story: solves the intro with real mouse input, holds every gate, opens a hotspot, screenshots each step |
-| `gate-test.js <out> [url]` | for every gate: can fast scrolling skip it? does holding work? what's on screen right after the cinematic without scrolling (catches "stuck on black") |
+| `gate-test.js <out> [url]` | for every gate: can fast scrolling skip it? does holding work? screen brightness (0–255, from real screenshots) for 4 s after the cinematic without scrolling — < 8 for more than ~2 s = stuck on black; > 210 = glare |
 
 Tile frames for a quick read:
 ```bash

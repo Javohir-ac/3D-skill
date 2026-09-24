@@ -22,7 +22,7 @@ export const story: StoryConfig = {
   intro: { type: "frost", prompt: "Draw a circle on the glass", hint: "wipe the frost away", xp: 100 },
   brand: "Tong",                 // loader + <title>
   lang: "uz",                    // <html lang>
-  heroShape: 1,                  // default hero silhouette: 0 orb, 1 coffee bean
+  heroShape: 1,                  // default hero silhouette: 0 orb, 1 coffee bean, 2 acorn
   description: "…",              // <meta description>
   cta: { label: "Buyurtma berish", href: "#order" },   // persistent bottom button
   ui: { loading: "…", skip: "…", pressHold: "…", … },  // interface copy, see lib/ui.ts
