@@ -77,6 +77,8 @@ export interface HeroKey {
   accent?: string;
   /** Spin speed (rad/s). */
   spin?: number;
+  /** Silhouette morph: 0 = orb, 1 = coffee bean. Defaults to story.heroShape. */
+  shape?: number;
 }
 
 /**
@@ -195,9 +197,39 @@ export interface Backdrop {
   stars?: number;
 }
 
+/** Interface copy — see lib/ui.ts for the English defaults. */
+export interface UiStrings {
+  loading: string;
+  ready: string;
+  skip: string;
+  almostCircle: string;
+  pressHold: string;
+  spaceKey: string;
+  /** {label} = the gate label */
+  holdAria: string;
+  motionFull: string;
+  motionReduced: string;
+  close: string;
+  chapters: string;
+  /** {n}, {title} */
+  goToChapter: string;
+  sources: string;
+  cursorHold: string;
+  cursorDraw: string;
+  cursorDrag: string;
+  cursorSwipe: string;
+  silenceAll: string;
+}
+
 export interface StoryConfig {
+  /** <html lang> of the site, e.g. "en", "uz". */
+  lang?: string;
+  /** Translations of the interface copy (any subset). */
+  ui?: Partial<UiStrings>;
   intro?: Intro;
   brand: string;
+  /** Default hero silhouette for keys without `shape` (0 = orb, 1 = coffee bean). */
+  heroShape?: number;
   description: string;
   chapters: Chapter[];
   hotspots: Hotspot[];

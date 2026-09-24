@@ -4,6 +4,7 @@ import { initScroll } from "@/lib/scroll";
 import { renderAnimated } from "@/lib/text";
 import { story } from "@/story/story.config";
 import type { StoryLine } from "@/story/types";
+import { ui } from "@/lib/ui";
 
 // The scroll track. Each chapter is a tall <section>; its copy is real HTML
 // (SEO + screen readers) laid out in a fixed layer and faded by lib/scroll.ts.
@@ -55,7 +56,7 @@ export default function Chapters() {
                   ))}
                 </ul>
                 <div className="line anchor-bl sources" data-line data-chapter={i} data-a={0} data-b={1} style={{ opacity: 0 }}>
-                  <p className="sources-title">Sources</p>
+                  <p className="sources-title">{ui.sources}</p>
                   {c.stats.map((s, k) =>
                     s.source ? (
                       <a key={k} className="source" href={s.source.href} target="_blank" rel="noreferrer">

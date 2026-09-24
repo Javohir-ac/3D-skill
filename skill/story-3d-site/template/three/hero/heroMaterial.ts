@@ -3,6 +3,7 @@ import { AdditiveBlending, Color, ShaderMaterial, Vector3 } from "three";
 // One stylised material that can be alive (liquid noise), broken (glowing
 // voronoi fissures), glass (rim-only, transparent) or pure light — every form
 // the hero takes during the story, blended by uniforms. No textures needed.
+// uShape morphs the silhouette: 0 = orb, 1 = coffee bean (oval, flat face, S crease).
 
 const noise = /* glsl */ `
   vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
@@ -29,25 +30,42 @@ const noise = /* glsl */ `
 const vertexShader = /* glsl */ `
   uniform float uTime;
   uniform float uNoise;
+  uniform float uShape;
   varying vec3 vNormalW;
   varying vec3 vViewDir;
   varying vec3 vObj;
+  varying float vGroove;
   ${noise}
   float field(vec3 p){ return snoise(p * 1.25 + vec3(0.0, uTime * 0.35, uTime * 0.2)) * 0.6 + snoise(p * 2.6 - uTime * 0.25) * 0.25; }
+  // S-shaped centre crease of a coffee bean, on the flat (+Z) side
+  float groove(vec3 p){
+    float s = 0.09 * sin(p.y * 2.6);
+    float g = exp(-pow((p.x - s) / 0.075, 2.0));
+    return g * smoothstep(-0.05, 0.35, p.z) * smoothstep(1.0, 0.7, abs(p.y));
+  }
+  // unit-sphere point → displaced surface; uShape morphs orb (0) → coffee bean (1)
+  vec3 surface(vec3 p){
+    vec3 n = normalize(p);
+    vec3 orb = p + n * field(p) * uNoise;
+    vec3 b = p * vec3(0.74, 1.0, 1.0);
+    b.z *= b.z > 0.0 ? 0.36 : 0.62;                 // flat face, domed back
+    b.z -= groove(p) * 0.2;                           // the crease
+    b += n * field(p) * uNoise * 0.12;                // keep a little life
+    return mix(orb, b, uShape);
+  }
   void main() {
     vObj = position;
     vec3 n = normalize(position);
-    float d = field(position) * uNoise;
-    vec3 displaced = position + n * d;
-    // approximate displaced normal with two neighbour samples along tangents
+    vec3 displaced = surface(position);
+    // displaced normal from two neighbour samples along tangents
     vec3 t = normalize(cross(n, abs(n.y) < 0.99 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0)));
     vec3 b = cross(n, t);
     float e = 0.02;
-    vec3 pt = position + t * e; vec3 pb = position + b * e;
-    vec3 dt = pt + normalize(pt) * field(pt) * uNoise;
-    vec3 db = pb + normalize(pb) * field(pb) * uNoise;
+    vec3 dt = surface(normalize(position + t * e));
+    vec3 db = surface(normalize(position + b * e));
     vec3 nn = normalize(cross(dt - displaced, db - displaced));
-    if (dot(nn, n) < 0.0) nn = -nn;
+    if (dot(nn, displaced) < 0.0) nn = -nn;
+    vGroove = groove(position) * uShape;
     vec4 world = modelMatrix * vec4(displaced, 1.0);
     vNormalW = normalize(mat3(modelMatrix) * nn);
     vViewDir = normalize(cameraPosition - world.xyz);
@@ -66,6 +84,7 @@ const fragmentShader = /* glsl */ `
   varying vec3 vNormalW;
   varying vec3 vViewDir;
   varying vec3 vObj;
+  varying float vGroove;
 
   vec3 hash3(vec3 p){ p = vec3(dot(p,vec3(127.1,311.7,74.7)), dot(p,vec3(269.5,183.3,246.1)), dot(p,vec3(113.5,271.9,124.6))); return fract(sin(p)*43758.5453); }
   // distance to the nearest voronoi cell edge (F2 - F1)
@@ -86,6 +105,7 @@ const fragmentShader = /* glsl */ `
     float spec = pow(max(dot(reflect(-normalize(uLightDir), n), v), 0.0), 40.0);
 
     vec3 body = uColor * (0.28 + 0.72 * lambert) + spec * 0.6;
+    body *= 1.0 - vGroove * 0.55;                    // the crease sits in shadow
     // broken: body darkens, fissures glow
     float edge = voronoiEdge(vObj * 2.4);
     float fissure = (1.0 - smoothstep(0.0, 0.07, edge)) * uCrack;
@@ -107,6 +127,7 @@ export function createHeroMaterial() {
     uniforms: {
       uTime: { value: 0 },
       uNoise: { value: 0.2 },
+      uShape: { value: 0 },
       uCrack: { value: 0 },
       uGlow: { value: 0 },
       uGlass: { value: 0 },

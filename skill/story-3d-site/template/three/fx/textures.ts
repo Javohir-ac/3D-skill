@@ -1,4 +1,4 @@
-import { CanvasTexture, SRGBColorSpace, type Texture } from "three";
+import { CanvasTexture, Color, SRGBColorSpace, type Texture } from "three";
 import { rand } from "@/lib/math";
 
 // Procedural textures so the template runs with zero binary assets.
@@ -55,13 +55,13 @@ export function makeCloudAtlas(size = 1024) {
   return { texture: finish(c), rects };
 }
 
-/** Rose-petal sprite. */
+/** Petal sprite (rose by default; pass cream for coffee blossom). */
 export function makePetalTexture(color = "#ff9fc4") {
   const [c, g] = canvas(128, 128);
   const grd = g.createLinearGradient(20, 20, 108, 108);
   grd.addColorStop(0, "#ffffff");
   grd.addColorStop(0.35, color);
-  grd.addColorStop(1, "#d9477f");
+  grd.addColorStop(1, `#${new Color(color).multiplyScalar(0.72).getHexString()}`); // darker edge of the same hue
   g.fillStyle = grd;
   g.beginPath();
   g.moveTo(64, 8);
@@ -142,7 +142,7 @@ export function makeMatcapTexture({ base = "#58c79a", light = "#e9fff4", rim = "
 }
 
 /** A paper calendar page whose days are crossed out — "someday" never arrives. */
-export function makeCalendarTexture(opts: { title?: string; serif?: string; mono?: string } = {}) {
+export function makeCalendarTexture(opts: { title?: string; days?: string[]; serif?: string; mono?: string } = {}) {
   const [c, g] = canvas(768, 960);
   const serif = opts.serif ?? "Georgia, serif";
   const mono = opts.mono ?? "monospace";
@@ -162,7 +162,7 @@ export function makeCalendarTexture(opts: { title?: string; serif?: string; mono
   g.fillText(opts.title ?? "Someday", 384, 170);
   g.font = `600 22px ${mono}`;
   g.fillStyle = "#7a6650";
-  const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const days = opts.days ?? ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
   days.forEach((d, i) => g.fillText(d, 84 + i * 100, 250));
   // grid of days, most crossed out in red marker
   g.font = `44px ${serif}`;

@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${serif.variable} ${script.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang={story.lang ?? "en"} className={`${serif.variable} ${script.variable} ${sans.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

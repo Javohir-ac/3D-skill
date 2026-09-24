@@ -4,6 +4,7 @@ import { scrollToChapter } from "@/lib/scroll";
 import { useStory } from "@/lib/store";
 import { plain } from "@/lib/text";
 import { story } from "@/story/story.config";
+import { fmt, ui } from "@/lib/ui";
 
 // Persistent chrome: progress ruler (top), XP (top-right), chapter nav (right),
 // CTA (bottom), motion toggle (bottom-left), hotspot card.
@@ -44,14 +45,14 @@ export function ChapterNav() {
   // a chapter is reachable if no unfinished gate stands before it
   const reachable = (i: number) => story.chapters.slice(0, i).every((c) => !c.gate || done.includes(c.id));
   return (
-    <nav className="chapter-nav" aria-label="Chapters">
+    <nav className="chapter-nav" aria-label={ui.chapters}>
       {story.chapters.map((c, i) => (
         <button
           key={c.id}
           className={`nav-dot ${i === active ? "is-active" : ""}`}
           disabled={!reachable(i)}
           aria-current={i === active ? "step" : undefined}
-          aria-label={`Go to chapter ${i + 1}: ${plain(c.title)}`}
+          aria-label={fmt(ui.goToChapter, { n: i + 1, title: plain(c.title) })}
           onClick={() => scrollToChapter(i)}
         >
           <span className="nav-tip">{c.title}</span>
@@ -75,7 +76,7 @@ export function MotionToggle() {
   const set = useStory((s) => s.setReducedMotion);
   return (
     <button className="motion-toggle" aria-pressed={reduced} onClick={() => set(!reduced)}>
-      {reduced ? "Motion: reduced" : "Motion: full"}
+      {reduced ? ui.motionReduced : ui.motionFull}
     </button>
   );
 }
@@ -92,7 +93,7 @@ export function HotspotCard() {
   if (!h) return null;
   return (
     <div className="card" role="dialog" aria-modal="false" aria-labelledby={`card-${h.id}`}>
-      <button className="card-close" onClick={() => close(null)} aria-label="Close">×</button>
+      <button className="card-close" onClick={() => close(null)} aria-label={ui.close}>×</button>
       <p className="card-kicker">{h.label}</p>
       <h3 id={`card-${h.id}`}>{h.title}</h3>
       <p>{h.body}</p>

@@ -260,11 +260,17 @@ a { color: inherit; }
   font: 500 11px/1 var(--font-mono), monospace; letter-spacing: 0.12em; text-transform: uppercase;
 }
 .frost-intro.is-solved .frost-copy, .frost-intro.is-solved .frost-skip { opacity: 0; pointer-events: none; }
-.frost-clock { position: absolute; overflow: visible; pointer-events: none; filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
-.frost-clock line, .frost-clock circle { stroke: #ffffff; stroke-width: 4; stroke-linecap: round; fill: #fff; }
-.frost-clock > line:not(.hand-h):not(.hand-m) { opacity: 0; animation: tickIn 0.35s var(--ease) forwards; }
-.frost-clock .hand-h { stroke-width: 6; animation: spin 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; transform-origin: 0 0; }
-.frost-clock .hand-m { animation: spin 0.35s linear 4; transform-origin: 0 0; }
+.frost-cup { position: absolute; overflow: visible; pointer-events: none; filter: drop-shadow(0 6px 18px rgba(20, 12, 6, 0.35)); }
+.frost-cup > * { opacity: 0; transform-origin: 0 0; animation: cupIn 0.5s var(--ease) forwards; }
+.cup-saucer { fill: rgba(255, 255, 255, 0.16); stroke: #ffffff; stroke-width: 3; }
+.cup-handle { fill: none; stroke: #ffffff; stroke-width: 7; stroke-linecap: round; animation-delay: 0.08s !important; }
+.cup-rim { fill: #f4efe8; stroke: #ffffff; stroke-width: 3; animation-delay: 0.12s !important; }
+.cup-coffee { fill: #5a3420; animation-delay: 0.22s !important; }
+.cup-crema { fill: none; stroke: #b9794a; stroke-width: 7; opacity: 0.8; animation-delay: 0.3s !important; }
+.cup-heart { fill: rgba(248, 236, 220, 0.95); stroke: #f8ecdc; stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: cupIn 0.3s var(--ease) 0.4s forwards, heartDraw 0.9s var(--ease) 0.4s forwards !important; }
+@keyframes cupIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes heartDraw { to { stroke-dashoffset: 0; } }
 @keyframes tickIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ───────────────── intro: notification wall ───────────────── */

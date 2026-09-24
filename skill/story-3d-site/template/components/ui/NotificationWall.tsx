@@ -6,6 +6,7 @@ import { rand } from "@/lib/math";
 import { startScroll } from "@/lib/scroll";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
+import { ui } from "@/lib/ui";
 
 // Opening interaction: the screen is buried under buzzing notifications.
 // Drag (or swipe) through them to fling them away — each one dissolves, and the
@@ -184,7 +185,7 @@ export function NotificationWall() {
       <div className="nw-ui">
         <p className="nw-prompt">{intro.prompt}</p>
         {intro.hint && <p className="nw-hint">{intro.hint} · {left} left</p>}
-        <button className="nw-silence" autoFocus>Silence all <span aria-hidden="true">↵</span></button>
+        <button className="nw-silence" autoFocus>{ui.silenceAll} <span aria-hidden="true">↵</span></button>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { startScroll } from "@/lib/scroll";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
+import { ui } from "@/lib/ui";
 
 // Branded loader (Zero-style drum digits, but honest and short): each digit is a
 // rolling 0–9 drum, a thin progress line, the brand name. Real asset progress
@@ -59,7 +60,7 @@ export function Loader() {
 
   return (
     <div className={`loader ${gone ? "is-gone" : ""}`} role="status" aria-live="polite" aria-hidden={gone}>
-      <span className="sr-only">{loaded ? "Ready" : `Loading ${value}%`}</span>
+      <span className="sr-only">{loaded ? ui.ready : `${ui.loading} ${value}%`}</span>
       <div className="loader-brand" aria-hidden="true">{story.brand}</div>
       <div className="loader-count" aria-hidden="true">
         {digits.map((d, i) => (
@@ -70,7 +71,7 @@ export function Loader() {
       <div className="loader-line" aria-hidden="true">
         <span style={{ transform: `scaleX(${shown / 100})` }} />
       </div>
-      <span className="loader-label" aria-hidden="true">{loaded ? "Ready" : "Loading the story"}</span>
+      <span className="loader-label" aria-hidden="true">{loaded ? ui.ready : ui.loading}</span>
     </div>
   );
 }

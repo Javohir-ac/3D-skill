@@ -7,6 +7,7 @@ import { startScroll } from "@/lib/scroll";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
 import { isCircle } from "./DrawIntro";
+import { ui } from "@/lib/ui";
 
 // Opening interaction "frost": the whole screen is a pane of frosted glass
 // (three/fx/FrostPane). Behind it the story's hero object is
@@ -127,26 +128,29 @@ export function FrostIntro() {
   return (
     <div ref={layer} className={`frost-intro ${clock ? "is-solved" : ""}`}>
       {clock && (
+        // the drawn circle becomes a cup of coffee seen from above (demo brand:
+        // coffee). For other briefs swap this for the brand's own "circle" object
+        // (a clock face, a planet, a lens…).
         <svg
-          className="frost-clock"
+          className="frost-cup"
           aria-hidden="true"
           viewBox="-100 -100 200 200"
           style={{ left: clock.x - clock.r, top: clock.y - clock.r, width: clock.r * 2, height: clock.r * 2 }}
         >
-          {Array.from({ length: 12 }, (_, i) => (
-            <line key={i} x1="0" y1={i % 3 ? -84 : -78} x2="0" y2="-94" transform={`rotate(${i * 30})`} style={{ animationDelay: `${i * 0.04}s` }} />
-          ))}
-          <line className="hand-h" x1="0" y1="8" x2="0" y2="-48" />
-          <line className="hand-m" x1="0" y1="10" x2="0" y2="-74" />
-          <circle r="4" />
+          <circle className="cup-saucer" r="94" />
+          <path className="cup-handle" d="M62,-13 h20 a13,13 0 0 1 0,26 h-20" />
+          <circle className="cup-rim" r="66" />
+          <circle className="cup-coffee" r="57" />
+          <circle className="cup-crema" r="54" />
+          <path className="cup-heart" d="M0,26 C-34,2 -36,-22 -17,-29 C-7,-33 0,-26 0,-19 C0,-26 7,-33 17,-29 C36,-22 34,2 0,26 Z" pathLength={1} />
         </svg>
       )}
       <div className="frost-copy">
-        <p className="frost-prompt" key={miss} data-miss={miss > 0 || undefined}>{miss > 0 ? "Almost — close the circle" : intro.prompt}</p>
+        <p className="frost-prompt" key={miss} data-miss={miss > 0 || undefined}>{miss > 0 ? ui.almostCircle : intro.prompt}</p>
         {intro.hint && <p className="frost-hint">{intro.hint}</p>}
       </div>
       <button className="frost-skip" onClick={skip} autoFocus>
-        Skip <span aria-hidden="true">↵</span>
+        {ui.skip} <span aria-hidden="true">↵</span>
       </button>
     </div>
   );

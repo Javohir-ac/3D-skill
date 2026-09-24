@@ -32,7 +32,8 @@ export default function EvidenceScene(props: SceneProps) {
     () => ({ serif: cssFont("--font-serif", "Georgia, serif"), sans: cssFont("--font-sans", "sans-serif"), mono: cssFont("--font-mono", "monospace") }),
     [],
   );
-  const calendar = useMemo(() => makeCalendarTexture(fonts), [fonts]);
+  // demo copy (Uzbek): days a bag of coffee sits on a shop shelf, crossed out
+  const calendar = useMemo(() => makeCalendarTexture({ ...fonts, title: "Tokchada", days: ["DU", "SE", "CH", "PA", "JU", "SH", "YA"] }), [fonts]);
   const statTex = useMemo(() => stats.map((s) => makeStatTexture(s.value, s.label, fonts)), [stats, fonts]);
   // stats share the first ~60% of the chapter; each flies through its own window
   const win = (i: number) => {

@@ -30,7 +30,7 @@ export function Hero() {
   const geo = useMemo(() => new IcosahedronGeometry(1, 48), []);
   const haloGeo = useMemo(() => new PlaneGeometry(1, 1), []);
 
-  const cur = useRef({ pos: new Vector3(0, 0, 0), scale: 0, noise: 0.2, crack: 0, glow: 0, glass: 0, spin: 0.2, color: new Color("#29d38a"), accent: new Color("#9dffd0") });
+  const cur = useRef({ pos: new Vector3(0, 0, 0), scale: 0, noise: 0.2, crack: 0, glow: 0, glass: 0, spin: 0.2, shape: story.heroShape ?? 0, color: new Color("#29d38a"), accent: new Color("#9dffd0") });
 
   // burst particles
   const burst = useMemo(() => {
@@ -63,12 +63,14 @@ export function Hero() {
     c.glow = damp(c.glow, (k.glow ?? 0) + fx.pulse * 1.5 + implode * 2 + explode * 6, L, dt);
     c.glass = damp(c.glass, k.glass ?? 0, L, dt);
     c.spin = damp(c.spin, k.spin ?? 0.2, L, dt);
+    c.shape = damp(c.shape, k.shape ?? story.heroShape ?? 0, L, dt);
     if (k.color) c.color.lerp(tc.set(k.color), 1 - Math.exp(-L * dt));
     if (k.accent) c.accent.lerp(ta.set(k.accent), 1 - Math.exp(-L * dt));
 
     const u = material.uniforms;
     u.uTime.value += dt;
     u.uNoise.value = c.noise;
+    u.uShape.value = c.shape;
     u.uCrack.value = c.crack;
     u.uGlow.value = c.glow;
     u.uGlass.value = c.glass;

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { completeGate } from "@/lib/scroll";
 import { useStory } from "@/lib/store";
 import { story } from "@/story/story.config";
+import { fmt, ui } from "@/lib/ui";
 
 // Press-and-hold gate (improved over Zero's): a dark glass disc that reads on
 // ANY background, an exact progress ring + percentage, idle ripples inviting the
@@ -67,7 +68,7 @@ export function HoldGate() {
         ref={btn}
         className="gate-btn"
         data-magnetic
-        aria-label={`${label} to continue. Press and hold the button, or hold Space.`}
+        aria-label={fmt(ui.holdAria, { label })}
         onPointerDown={(e) => {
           e.preventDefault();
           e.currentTarget.setPointerCapture(e.pointerId);
@@ -100,7 +101,7 @@ export function HoldGate() {
         </span>
       </button>
       <p className="gate-hint" aria-hidden="true">
-        Press &amp; hold <span className="gate-key">Space</span>
+        {ui.pressHold} <span className="gate-key">{ui.spaceKey}</span>
       </p>
     </div>
   );

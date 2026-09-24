@@ -30,7 +30,7 @@ export default function DreamScene(props: SceneProps) {
   return (
     <group ref={root}>
       <CloudField dive={() => p() * 0.35} speed={0.6} seed={2} color="#e3eaee" />
-      <Particles kind="petal" count={80} area={[12, 7, 5]} size={[0.07, 0.16]} lift={-0.25} sway={0.6} spin={1.2} seed={5} opacity={() => range(p(), 0.2, 0.45)} />
+      <Particles kind="petal" color="#fff3df" count={80} area={[12, 7, 5]} size={[0.07, 0.16]} lift={-0.25} sway={0.6} spin={1.2} seed={5} opacity={() => range(p(), 0.2, 0.45)} />
       {/* soft key + sky fill for the sculpted hand (the orb is self-lit) */}
       <hemisphereLight args={["#eef6ff", "#8aa3a0", 1.2]} />
       <directionalLight position={[3, 5, 6]} intensity={2.2} color="#fff3e8" />

@@ -49,3 +49,13 @@ Birinchi versiya ≈ 2.5–3.5 soat; sinovlar bilan to'liq ≈ 5–7 soat.
 - **Qahramon obyekt** (`three/hero`) — bitta shader obyekt butun hikoya bo'ylab shakl o'zgartiradi. ✅ demo
 - **Zarrachalar tili** (`three/particles`, `chapter.particles`) — 26k zarracha belgi/matn/3D shakllar orasida oqadi. Muqobil: mahsulot ikonografiyaga boy bo'lsa yaxshi; och fonlarda to'q "siyoh" zarrachalar (additive: false) kerak.
 - Saboq: foydalanuvchi uchun **hikoya mazmuni va mantig'i** uslubdan muhimroq — yangi uslub sinalganda eski hikoyani saqlab qolish kerak.
+
+## Mavzuga moslashish qoidasi (foydalanuvchi qarori, 2026-09-24)
+Skill har bir brifda **mavzudan kelib chiqib** hammasini o'zi tanlaydi — shablon ranglari/hikoyasi qotib qolmaydi:
+- **Hikoya** — mavzuning o'z "hayot yo'li" (kofe: dona → terim → qovurish → chashka). Har bob o'tishi sabab → oqibat.
+- **Bosh obyekt (hero)** — mavzu metaforasi, birinchi kadrdanoq tanilsin (kofe → qahva donagi `heroShape: 1`; vaqt → soatli shar; ekologiya → urug').
+- **Rang palitrasi** — mavzudan: kofe → krem, karamel, qovurilgan jigarrang, olov to'q sariq; ko'z charchamasligi uchun oppoq/juda yorqin emas, o'rta tonlar.
+- **Uslub** — tipografiya, material (haykal/shisha/qog'oz), effektlar mavzuga mos.
+- **Kirish obyekti** — chizilgan doira mavzu obyektiga aylanadi (kofe → chashka, vaqt → soat).
+- **Til** — sayt matnlari va interfeys (`story.lang`, `story.ui`) foydalanuvchi tilida.
+Demo (`template/`) hozir "Tong" kofe brendi, o'zbekcha: hikoya, hero-don, chashka, kalendar, hotspotlar moslangan; fon ranglari hali eski (mint/qizil) — skill yozilganda mavzu→palitra qoidasi bilan hal qilinadi.
